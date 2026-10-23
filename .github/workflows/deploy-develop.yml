@@ -26,6 +26,8 @@ jobs:
       NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID_DEVELOP || '1:867937526837:web:a2ec1362ba9fe52fb83d7c' }}
       NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID_DEVELOP || 'G-TF25C8921B' }}
       NODE_ENV: development
+      FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS }}
+      FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP }}
 
     steps:
       - name: Checkout Code
@@ -47,7 +49,7 @@ jobs:
         run: npm run build
 
       - name: Deploy Preview on Pull Request
-        if: github.event_name == 'pull_request' && secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS != ''
+        if: github.event_name == 'pull_request' && env.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS != ''
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
@@ -55,10 +57,10 @@ jobs:
           projectId: yeyo-systems
 
       - name: Deploy to Develop Project (When Configured)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP != ''
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && env.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP != ''
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP }}
-          projectId: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID_DEVELOP }}
+          projectId: ${{ env.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
           channelId: live
