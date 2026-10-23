@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Yeyo Systems — Design System
+   Paleta corporativa + Variables CSS
+   Compatible con Tailwind CSS v4
+   ============================================================ */
+
+/* ============================================================
+   Custom theme tokens for Tailwind v4
+   ============================================================ */
+@theme {
+  /* Tipografía */
+  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-mono: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Colores corporativos */
+  --color-smoke-light: #F8FAFC;
+  --color-smoke-dark: #0B0F17;
+  --color-slate-surface: #1E293B;
+
+  --color-indigo-accent: #4F46E5;
+  --color-indigo-hover: #4338CA;
+  --color-emerald-active: #10B981;
+  --color-emerald-hover: #059669;
+
+  /* Animaciones */
+  --animate-fade-in: fade-in 0.4s ease-out;
+  --animate-slide-up: slide-up 0.5s ease-out;
+  --animate-scale-in: scale-in 0.3s ease-out;
+}
+
+/* ============================================================
+   Variables CSS globales
+   ============================================================ */
+:root {
+  /* Light Mode */
+  --bg-page: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --text-primary: #0F172A;
+  --text-secondary: #64748B;
+  --border-color: #E2E8F0;
+  --shadow-color: rgba(15, 23, 42, 0.08);
+}
+
+.dark {
+  /* Dark Mode */
+  --bg-page: #0B0F17;
+  --bg-card: #1E293B;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --border-color: #334155;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   Base Styles
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   Scrollbar personalizado (Dark mode)
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ============================================================
+   Keyframe Animations
+   ============================================================ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   Utility classes
+   ============================================================ */
+.glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.animate-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+.animate-in.fade-in {
+  animation-name: fade-in;
+}
+
+.animate-in.zoom-in-95 {
+  animation-name: scale-in;
+}
+
+/* ============================================================
+   Line clamp utility (fallback)
+   ============================================================ */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================================
+   Focus visible styles (Accesibilidad)
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid #4F46E5;
+  outline-offset: 2px;
+  border-radius: 4px;
+}

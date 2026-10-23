@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ================================================================
+    // public_app_metrics — Colección de métricas anónimas públicas
+    // ================================================================
+    // READ: Permitido para todos (el sitio web lee métricas públicas)
+    // WRITE: PROHIBIDO desde el cliente
+    //   → La escritura SOLO ocurre via Firebase Admin SDK
+    //     en el endpoint /api/metrics/sync (server-side)
+    // ================================================================
+    match /public_app_metrics/{appId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ================================================================
+    // public_apps — Datos públicos de apps (opcional, futuro)
+    // ================================================================
+    match /public_apps/{appId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ================================================================
+    // Regla catch-all: DENIEGA todo lo demás
+    // Ninguna otra colección es accesible desde el cliente web.
+    // ================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
