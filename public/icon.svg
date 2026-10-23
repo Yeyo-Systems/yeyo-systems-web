@@ -1,0 +1,61 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradientes Neón Cyberpunk / High-Tech -->
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#7000FF" />
+    </linearGradient>
+
+    <linearGradient id="violet-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A855F7" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+
+    <linearGradient id="mint-glow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#00F0FF" />
+    </linearGradient>
+
+    <!-- Filtro de Resplandor Neón (Glow Effect) -->
+    <filter id="neon-blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Fondo Contenedor Dark Pizarra con Borde Cristalino -->
+  <rect width="512" height="512" rx="128" fill="#0B0F17" />
+  <rect width="504" height="504" x="4" y="4" rx="124" stroke="#1E293B" stroke-width="4" />
+
+  <!-- NÚCLEO ISOMÉTRICO 3D (FORMA Y) -->
+  <g filter="url(#neon-blur)" transform="translate(0, -10)">
+    <!-- Carra Superior Izquierda (Brazo Y Izquierdo) -->
+    <path d="M 256 120 L 140 186 L 200 220 L 256 188 Z" fill="url(#cyan-glow)" opacity="0.9" />
+
+    <!-- Cara Superior Derecha (Brazo Y Derecho) -->
+    <path d="M 256 120 L 372 186 L 312 220 L 256 188 Z" fill="url(#violet-glow)" opacity="0.9" />
+
+    <!-- Cristal Central Y-Connector -->
+    <path d="M 256 188 L 312 220 L 256 252 L 200 220 Z" fill="#00F0FF" opacity="0.3" />
+
+    <!-- Tallo Central Frontal (Eje Vertical Y) -->
+    <path d="M 256 252 L 312 220 L 312 340 L 256 372 Z" fill="url(#violet-glow)" opacity="0.8" />
+    <path d="M 256 252 L 200 220 L 200 340 L 256 372 Z" fill="url(#cyan-glow)" opacity="0.95" />
+
+    <!-- Base Inferior Neón Mint (Realtime Indicator) -->
+    <path d="M 256 372 L 312 340 L 256 310 L 200 340 Z" fill="url(#mint-glow)" />
+
+    <!-- Vértices y Líneas de Circuito Neón (Edges) -->
+    <path d="M 256 120 L 256 188 M 256 188 L 256 252 M 256 252 L 256 372" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <path d="M 140 186 L 256 252 L 372 186" stroke="#00F0FF" stroke-width="2" opacity="0.8" />
+  </g>
+
+  <!-- Puntos Nodos de Datos Flotantes -->
+  <circle cx="256" cy="110" r="6" fill="#00F0FF" filter="url(#neon-blur)" />
+  <circle cx="128" cy="186" r="5" fill="#A855F7" filter="url(#neon-blur)" />
+  <circle cx="384" cy="186" r="5" fill="#A855F7" filter="url(#neon-blur)" />
+  <circle cx="256" cy="390" r="6" fill="#10B981" filter="url(#neon-blur)" />
+</svg>

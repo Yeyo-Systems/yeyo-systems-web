@@ -53,7 +53,8 @@ export class AppRepositoryImpl implements IAppRepository {
     return this.mockDataSource.streamPublicMetrics(callback);
   }
 
-  async syncMetrics(metric: AppMetric): Promise<void> {
+  async syncMetrics(_metric: AppMetric): Promise<void> {
+    void _metric;
     // Esta operación solo se hace en el servidor (API Route)
     // No se expone en el cliente
     throw new Error(

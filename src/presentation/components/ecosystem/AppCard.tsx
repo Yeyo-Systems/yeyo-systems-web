@@ -1,23 +1,15 @@
 'use client';
 
+import React, { useState } from 'react';
 import type { AppProduct } from '@/domain/entities/AppProduct';
 import { getStatusLabel, isActiveStatus } from '@/domain/entities/AppProduct';
 import { formatDownloads, formatRating } from '@/domain/entities/AppMetric';
 import { PlatformModal } from './PlatformModal';
-import { useState } from 'react';
+import { Badge, Button } from '@/presentation/components/ui';
 
 interface AppCardProps {
   app: AppProduct;
 }
-
-const statusColors: Record<AppProduct['status'], string> = {
-  production: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-  beta: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
-  alpha: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-  development: 'bg-slate-500/15 text-slate-400 border-slate-500/30',
-  maintenance: 'bg-orange-500/15 text-orange-400 border-orange-500/30',
-  deprecated: 'bg-red-500/15 text-red-400 border-red-500/30',
-};
 
 const categoryIcons: Record<AppProduct['category'], string> = {
   health: '💚',
@@ -37,12 +29,12 @@ export function AppCard({ app }: AppCardProps) {
       <article
         className="
           group relative flex flex-col
-          bg-white dark:bg-slate-800/60
-          border border-slate-200 dark:border-slate-700/60
+          bg-white dark:bg-[#1E293B]
+          border border-slate-200 dark:border-slate-800
           rounded-2xl overflow-hidden
-          shadow-sm hover:shadow-xl hover:shadow-slate-900/10 dark:hover:shadow-slate-900/50
+          shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 dark:hover:shadow-black/50
           transition-all duration-300 ease-out
-          hover:-translate-y-1 hover:scale-[1.01]
+          hover:-translate-y-1 hover:border-indigo-500/30
           backdrop-blur-sm
         "
       >
@@ -71,21 +63,9 @@ export function AppCard({ app }: AppCardProps) {
                 {app.name}
               </h3>
               {/* Status Badge */}
-              <span
-                className={`
-                  inline-flex items-center gap-1 px-2 py-0.5
-                  rounded-full text-xs font-semibold border
-                  ${statusColors[app.status]}
-                `}
-              >
-                {isActive && (
-                  <span
-                    className="w-1.5 h-1.5 rounded-full animate-pulse"
-                    style={{ backgroundColor: 'currentColor' }}
-                  />
-                )}
+              <Badge variant={app.status} pulse={isActive}>
                 {getStatusLabel(app.status)}
-              </span>
+              </Badge>
             </div>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
               {app.tagline}
@@ -102,7 +82,7 @@ export function AppCard({ app }: AppCardProps) {
 
         {/* Metrics Row */}
         {app.metrics && (app.metrics.totalDownloads > 0 || app.metrics.averageRating > 0) && (
-          <div className="px-6 py-3 border-t border-slate-100 dark:border-slate-700/50 flex gap-4">
+          <div className="px-6 py-3 border-t border-slate-100 dark:border-slate-800/60 flex gap-4">
             {app.metrics.totalDownloads > 0 && (
               <div className="flex items-center gap-1.5">
                 <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -130,7 +110,7 @@ export function AppCard({ app }: AppCardProps) {
           {app.platforms.map((platform) => (
             <span
               key={platform}
-              className="px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-400"
+              className="px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/50 dark:border-slate-700/50"
             >
               {platform.charAt(0).toUpperCase() + platform.slice(1)}
             </span>
@@ -140,22 +120,21 @@ export function AppCard({ app }: AppCardProps) {
         {/* CTA Button */}
         <div className="px-6 pb-6">
           {app.isAvailable ? (
-            <button
+            <Button
+              variant="primary"
+              size="md"
+              className="w-full"
               onClick={() => setIsModalOpen(true)}
-              className="
-                w-full py-2.5 px-4 rounded-xl
-                bg-indigo-600 hover:bg-indigo-500
-                text-white text-sm font-semibold
-                transition-all duration-200
-                shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40
-                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
-                dark:focus:ring-offset-slate-800
-              "
+              rightIcon={
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              }
             >
-              Ver plataformas →
-            </button>
+              Ver plataformas
+            </Button>
           ) : (
-            <div className="w-full py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-700/50 text-center">
+            <div className="w-full py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 text-center">
               <span className="text-sm text-slate-400 font-medium">Próximamente</span>
             </div>
           )}
@@ -165,7 +144,7 @@ export function AppCard({ app }: AppCardProps) {
         <div
           className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
           style={{
-            background: `radial-gradient(circle at 50% 0%, ${app.accentColor}08 0%, transparent 70%)`,
+            background: `radial-gradient(circle at 50% 0%, ${app.accentColor}12 0%, transparent 70%)`,
           }}
         />
       </article>

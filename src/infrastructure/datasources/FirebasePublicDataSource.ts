@@ -90,6 +90,7 @@ export class FirebasePublicDataSource {
    * en el API Route /api/metrics/sync.
    */
   async syncMetrics(_metric: AppMetric): Promise<void> {
+    void _metric;
     throw new Error(
       'syncMetrics() is not available in FirebasePublicDataSource (client-side). ' +
         'Use the API Route /api/metrics/sync for server-side writes.'

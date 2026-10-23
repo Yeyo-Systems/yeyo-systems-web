@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import React from 'react';
 import type { AppProduct } from '@/domain/entities/AppProduct';
+import { Modal } from '@/presentation/components/ui/Modal';
 
 interface PlatformModalProps {
   app: AppProduct;
@@ -32,7 +33,7 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'App Store',
       url: appLinks.appStore,
-      icon: '',
+      icon: '🍎',
       description: 'Descargar para iOS',
     });
   }
@@ -89,134 +90,70 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
 }
 
 export function PlatformModal({ app, isOpen, onClose }: PlatformModalProps) {
-  const overlayRef = useRef<HTMLDivElement>(null);
   const platformLinks = getLinksForApp(app);
 
-  // Close on Escape
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
   return (
-    <div
-      ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={(e) => {
-        if (e.target === overlayRef.current) onClose();
-      }}
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={app.name}
+      subtitle="Selecciona tu plataforma de descarga o acceso"
+      maxWidth="md"
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" />
-
-      {/* Modal */}
-      <div
-        className="
-          relative w-full max-w-md
-          bg-white dark:bg-slate-900
-          border border-slate-200 dark:border-slate-700
-          rounded-2xl shadow-2xl
-          animate-in fade-in zoom-in-95 duration-200
-        "
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800">
-          <div>
-            <h2
-              id="modal-title"
-              className="text-xl font-bold text-slate-900 dark:text-slate-50"
+      {/* Platform Links */}
+      <div className="p-6 space-y-3">
+        {platformLinks.length === 0 ? (
+          <p className="text-center text-slate-400 py-8">
+            No hay plataformas disponibles aún.
+          </p>
+        ) : (
+          platformLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                flex items-center gap-4 p-4
+                rounded-xl border border-slate-200 dark:border-slate-800
+                hover:border-indigo-500/50 dark:hover:border-indigo-500/50
+                hover:bg-indigo-50/50 dark:hover:bg-indigo-500/5
+                transition-all duration-200 group
+              "
             >
-              {app.name}
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Selecciona tu plataforma
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="
-              p-2 rounded-xl
-              text-slate-400 hover:text-slate-600 dark:hover:text-slate-200
-              hover:bg-slate-100 dark:hover:bg-slate-800
-              transition-colors duration-150
-            "
-            aria-label="Cerrar modal"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Platform Links */}
-        <div className="p-6 space-y-3">
-          {platformLinks.length === 0 ? (
-            <p className="text-center text-slate-400 py-8">
-              No hay plataformas disponibles aún.
-            </p>
-          ) : (
-            platformLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  flex items-center gap-4 p-4
-                  rounded-xl border border-slate-200 dark:border-slate-700
-                  hover:border-indigo-500/50 dark:hover:border-indigo-500/50
-                  hover:bg-indigo-50/50 dark:hover:bg-indigo-500/5
-                  transition-all duration-200 group
-                "
-              >
-                <span className="text-2xl w-8 text-center flex-shrink-0">
-                  {link.icon}
-                </span>
-                <div className="flex-1">
-                  <div className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
-                    {link.label}
-                  </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400">
-                    {link.description}
-                  </div>
+              <span className="text-2xl w-8 text-center flex-shrink-0">
+                {link.icon}
+              </span>
+              <div className="flex-1">
+                <div className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
+                  {link.label}
                 </div>
-                <svg
-                  className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors duration-200"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-            ))
-          )}
-        </div>
-
-        {/* Version info if available */}
-        {app.metrics?.latestVersion && (
-          <div className="px-6 pb-6">
-            <p className="text-center text-xs text-slate-400">
-              Versión actual: <span className="font-mono font-semibold">{app.metrics.latestVersion}</span>
-            </p>
-          </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">
+                  {link.description}
+                </div>
+              </div>
+              <svg
+                className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors duration-200"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          ))
         )}
       </div>
-    </div>
+
+      {/* Version info if available */}
+      {app.metrics?.latestVersion && (
+        <div className="px-6 pb-6 border-t border-slate-100 dark:border-slate-800/60 pt-4">
+          <p className="text-center text-xs text-slate-400">
+            Versión actual: <span className="font-mono font-semibold text-slate-600 dark:text-slate-300">{app.metrics.latestVersion}</span>
+          </p>
+        </div>
+      )}
+    </Modal>
   );
 }

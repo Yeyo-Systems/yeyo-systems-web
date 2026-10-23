@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
+import Image from 'next/image';
 import { ThemeProvider } from '@/presentation/theme/ThemeProvider';
 import { ThemeToggle } from '@/presentation/components/ui/ThemeToggle';
+import { COMPANY_NAME, GITHUB_ORG_URL, SITE_URL } from '@/shared/constants';
 import './globals.css';
 
 // ============================================================
@@ -24,12 +26,13 @@ const jetbrainsMono = JetBrains_Mono({
 // SEO Metadata
 // ============================================================
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Yeyo Systems — Software Multiplataforma en Flutter',
     template: '%s | Yeyo Systems',
   },
   description:
-    'Ecosistema de aplicaciones multiplataforma construidas en Flutter. Khatu, Cortex, Saberio y más — software con propósito para mejorar la vida de las personas.',
+    'Ecosistema de aplicaciones multiplataforma construidas en Flutter. Khatu, Cortex, Saberio y más — software con propósito para transformar la experiencia de las personas.',
   keywords: [
     'Flutter',
     'aplicaciones móviles',
@@ -37,32 +40,40 @@ export const metadata: Metadata = {
     'Khatu',
     'Cortex',
     'Saberio',
+    'Khatu Services',
+    'Amateur Things',
     'software multiplataforma',
     'apps Colombia',
   ],
-  authors: [{ name: 'Yeyo Systems', url: 'https://yeyosystems.com' }],
-  creator: 'Yeyo Systems',
+  authors: [{ name: COMPANY_NAME, url: SITE_URL }],
+  creator: COMPANY_NAME,
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'es_CO',
-    url: 'https://yeyosystems.com',
-    siteName: 'Yeyo Systems',
+    url: SITE_URL,
+    siteName: COMPANY_NAME,
     title: 'Yeyo Systems — Software Multiplataforma en Flutter',
     description:
       'Ecosistema de aplicaciones multiplataforma construidas en Flutter.',
     images: [
       {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Yeyo Systems',
+        url: '/logo.svg',
+        width: 680,
+        height: 160,
+        alt: 'Yeyo Systems Logo',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Yeyo Systems',
+    title: COMPANY_NAME,
     description: 'Software multiplataforma en Flutter',
+    images: ['/logo.svg'],
   },
   robots: {
     index: true,
@@ -99,15 +110,28 @@ export default function RootLayout({ children }: RootLayoutProps) {
           {/* Navigation */}
           <header className="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-[#0B0F17]/80 backdrop-blur-md">
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-              {/* Logo */}
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                  <span className="text-white text-sm font-black">Y</span>
+              {/* Logo / Brand */}
+              <a href="#" className="flex items-center gap-3 group">
+                <div className="relative w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
+                  <Image
+                    src="/icon.svg"
+                    alt="Yeyo Systems Icon"
+                    width={36}
+                    height={36}
+                    className="w-full h-full object-contain"
+                    priority
+                  />
                 </div>
-                <span className="font-bold text-lg text-slate-900 dark:text-slate-50 tracking-tight">
-                  Yeyo Systems
-                </span>
-              </div>
+                <div className="flex flex-col">
+                  <span className="font-extrabold text-lg text-slate-900 dark:text-slate-50 tracking-tight leading-tight flex items-center gap-1.5">
+                    Yeyo Systems
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  </span>
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 dark:text-slate-500 font-semibold">
+                    Flutter Ecosystem
+                  </span>
+                </div>
+              </a>
 
               {/* Nav Links */}
               <div className="hidden md:flex items-center gap-6">
@@ -115,7 +139,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   href="#ecosystem"
                   className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
                 >
-                  Apps
+                  Ecosistema
                 </a>
                 <a
                   href="#about"
@@ -124,7 +148,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   Nosotros
                 </a>
                 <a
-                  href="https://github.com/Yeyo-Systems"
+                  href={GITHUB_ORG_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
@@ -144,26 +168,51 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <main className="flex-1">{children}</main>
 
           {/* Footer */}
-          <footer className="border-t border-slate-200 dark:border-slate-800 py-8 mt-auto">
+          <footer className="border-t border-slate-200 dark:border-slate-800 py-10 mt-auto bg-slate-50/50 dark:bg-slate-900/40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center">
-                    <span className="text-white text-xs font-black">Y</span>
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 rounded-lg overflow-hidden shadow-sm">
+                    <Image
+                      src="/icon.svg"
+                      alt="Yeyo Systems"
+                      width={28}
+                      height={28}
+                      className="w-full h-full object-contain"
+                    />
                   </div>
-                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                    Yeyo Systems
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                      Yeyo Systems
+                    </span>
+                    <span className="text-xs text-slate-400">
+                      Multi-Platform Software Engineering
+                    </span>
+                  </div>
                 </div>
-                <p className="text-xs text-slate-400 dark:text-slate-500">
-                  © {new Date().getFullYear()} Yeyo Systems. Construido con Flutter &amp; Next.js.
+
+                <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
+                  © 2026 Yeyo Systems. Clean Architecture con Flutter &amp; Next.js.
                 </p>
-                <div className="flex items-center gap-4">
+
+                <div className="flex items-center gap-5">
                   <a
-                    href="https://github.com/Yeyo-Systems"
+                    href="#ecosystem"
+                    className="text-xs text-slate-500 hover:text-indigo-500 transition-colors duration-200"
+                  >
+                    Apps
+                  </a>
+                  <a
+                    href="#about"
+                    className="text-xs text-slate-500 hover:text-indigo-500 transition-colors duration-200"
+                  >
+                    Filosofía
+                  </a>
+                  <a
+                    href={GITHUB_ORG_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-slate-400 hover:text-indigo-500 transition-colors duration-200"
+                    className="text-xs text-slate-500 hover:text-indigo-500 transition-colors duration-200"
                   >
                     GitHub
                   </a>
