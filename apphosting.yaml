@@ -1,0 +1,26 @@
+# ============================================================
+# Firebase App Hosting Configuration for Next.js App Router
+# ============================================================
+
+runConfig:
+  minInstances: 0
+  maxInstances: 5
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 1024
+
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: "AIzaSyDeYhoDLX7-fmWOUjAQdlrq-cFiOS1rP-Q"
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: "yeyo-systems.firebaseapp.com"
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: "yeyo-systems"
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: "yeyo-systems.firebasestorage.app"
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "867937526837"
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "1:867937526837:web:a2ec1362ba9fe52fb83d7c"
+  - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    value: "G-TF25C8921B"

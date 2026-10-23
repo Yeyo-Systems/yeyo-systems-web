@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import Image from 'next/image';
 import { ThemeProvider } from '@/presentation/theme/ThemeProvider';
 import { ThemeToggle } from '@/presentation/components/ui/ThemeToggle';
+import { FirebaseAnalytics } from '@/presentation/components/FirebaseAnalytics';
 import { COMPANY_NAME, GITHUB_ORG_URL, SITE_URL } from '@/shared/constants';
 import './globals.css';
 
@@ -107,6 +108,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     >
       <body className="min-h-full flex flex-col antialiased bg-[#F8FAFC] dark:bg-[#0B0F17] text-slate-900 dark:text-slate-50 transition-colors duration-300">
         <ThemeProvider>
+          <FirebaseAnalytics />
           {/* Navigation */}
           <header className="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-[#0B0F17]/80 backdrop-blur-md">
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">

@@ -7,6 +7,7 @@
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
+import type { Analytics } from 'firebase/analytics';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,6 +16,7 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 /**
@@ -29,7 +31,7 @@ function getFirebaseApp(): FirebaseApp {
   // Validación de config en desarrollo
   if (process.env.NODE_ENV === 'development') {
     const missingVars = Object.entries(firebaseConfig)
-      .filter(([, value]) => !value)
+      .filter(([key, value]) => key !== 'measurementId' && !value)
       .map(([key]) => `NEXT_PUBLIC_FIREBASE_${key.toUpperCase()}`);
 
     if (missingVars.length > 0) {
@@ -50,6 +52,25 @@ function getFirebaseApp(): FirebaseApp {
 export function getFirestoreDb(): Firestore {
   const app = getFirebaseApp();
   return getFirestore(app);
+}
+
+/**
+ * Instancia de Firebase Analytics (solo en cliente).
+ */
+export async function getFirebaseAnalytics(): Promise<Analytics | null> {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const { getAnalytics, isSupported } = await import('firebase/analytics');
+    const supported = await isSupported();
+    if (supported) {
+      const app = getFirebaseApp();
+      return getAnalytics(app);
+    }
+  } catch (error) {
+    console.warn('[Firebase] Analytics could not be initialized:', error);
+  }
+  return null;
 }
 
 /** ¿Está Firebase configurado correctamente? */
