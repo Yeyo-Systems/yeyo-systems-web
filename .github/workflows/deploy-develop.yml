@@ -6,7 +6,6 @@ on:
       - develop
   pull_request:
     branches:
-      - master
       - develop
 
 concurrency:
@@ -18,16 +17,16 @@ jobs:
     name: Test, Build & Preview (Develop)
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY_DEVELOP || secrets.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyDeYhoDLX7-fmWOUjAQdlrq-cFiOS1rP-Q' }}
-      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN_DEVELOP || 'yeyo-systems-dev.firebaseapp.com' }}
-      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID_DEVELOP || 'yeyo-systems-dev' }}
-      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET_DEVELOP || 'yeyo-systems-dev.firebasestorage.app' }}
-      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID_DEVELOP || '867937526837' }}
-      NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID_DEVELOP || '1:867937526837:web:a2ec1362ba9fe52fb83d7c' }}
-      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID_DEVELOP || 'G-TF25C8921B' }}
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${{ vars.NEXT_PUBLIC_FIREBASE_API_KEY_DEVELOP }}
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ vars.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN_DEVELOP }}
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_PROJECT_ID_DEVELOP }}
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ vars.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET_DEVELOP }}
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID_DEVELOP }}
+      NEXT_PUBLIC_FIREBASE_APP_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_APP_ID_DEVELOP }}
+      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID_DEVELOP }}
       NODE_ENV: development
-      FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS }}
       FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP }}
+      FIREBASE_PROJECT_ID_DEVELOP: ${{ vars.FIREBASE_PROJECT_ID_DEVELOP }}
 
     steps:
       - name: Checkout Code
@@ -48,13 +47,20 @@ jobs:
       - name: Build Next.js Application
         run: npm run build
 
+      - name: Verify isolated deploy configuration
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        run: |
+          test -n "$FIREBASE_PROJECT_ID_DEVELOP"
+          test -n "$FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP"
+
       - name: Deploy Preview on Pull Request
-        if: github.event_name == 'pull_request' && env.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS != ''
+        if: github.event_name == 'pull_request' && env.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP != '' && env.FIREBASE_PROJECT_ID_DEVELOP != ''
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS }}
-          projectId: yeyo-systems
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP }}
+          projectId: ${{ env.FIREBASE_PROJECT_ID_DEVELOP }}
+          channelId: pr-${{ github.event.pull_request.number }}
 
       - name: Deploy to Develop Project (When Configured)
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && env.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP != ''
@@ -62,5 +68,5 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS_DEVELOP }}
-          projectId: ${{ env.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          projectId: ${{ env.FIREBASE_PROJECT_ID_DEVELOP }}
           channelId: live

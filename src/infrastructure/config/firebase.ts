@@ -19,6 +19,15 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
+const requiredFirebaseEnvVars = [
+  'NEXT_PUBLIC_FIREBASE_API_KEY',
+  'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN',
+  'NEXT_PUBLIC_FIREBASE_PROJECT_ID',
+  'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET',
+  'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
+  'NEXT_PUBLIC_FIREBASE_APP_ID',
+] as const;
+
 /**
  * Singleton de Firebase App.
  * Evita re-inicialización en Hot Module Replacement de Next.js.
@@ -30,9 +39,9 @@ function getFirebaseApp(): FirebaseApp {
 
   // Validación de config en desarrollo
   if (process.env.NODE_ENV === 'development') {
-    const missingVars = Object.entries(firebaseConfig)
-      .filter(([key, value]) => key !== 'measurementId' && !value)
-      .map(([key]) => `NEXT_PUBLIC_FIREBASE_${key.toUpperCase()}`);
+    const missingVars = requiredFirebaseEnvVars.filter(
+      (variableName) => !process.env[variableName]
+    );
 
     if (missingVars.length > 0) {
       console.warn(
@@ -75,9 +84,8 @@ export async function getFirebaseAnalytics(): Promise<Analytics | null> {
 
 /** ¿Está Firebase configurado correctamente? */
 export function isFirebaseConfigured(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
-      process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  return requiredFirebaseEnvVars.every((variableName) =>
+    Boolean(process.env[variableName])
   );
 }
 

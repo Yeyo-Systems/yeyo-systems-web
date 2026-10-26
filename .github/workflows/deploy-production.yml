@@ -14,16 +14,16 @@ jobs:
     name: Build & Deploy to Production (yeyo-systems)
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyDeYhoDLX7-fmWOUjAQdlrq-cFiOS1rP-Q' }}
-      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'yeyo-systems.firebaseapp.com' }}
-      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'yeyo-systems' }}
-      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'yeyo-systems.firebasestorage.app' }}
-      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '867937526837' }}
-      NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID || '1:867937526837:web:a2ec1362ba9fe52fb83d7c' }}
-      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-TF25C8921B' }}
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${{ vars.NEXT_PUBLIC_FIREBASE_API_KEY_PRODUCTION }}
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ vars.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN_PRODUCTION }}
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_PROJECT_ID_PRODUCTION }}
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ vars.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET_PRODUCTION }}
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID_PRODUCTION }}
+      NEXT_PUBLIC_FIREBASE_APP_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_APP_ID_PRODUCTION }}
+      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID_PRODUCTION }}
       NODE_ENV: production
-      FIREBASE_PROJECT_ID: yeyo-systems
-      FIREBASE_PROJECT_NUMBER: '867937526837'
+      FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}
+      FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS }}
 
     steps:
       - name: Checkout Code
@@ -44,10 +44,15 @@ jobs:
       - name: Build Next.js Application
         run: npm run build
 
+      - name: Verify production deploy configuration
+        run: |
+          test -n "$FIREBASE_PROJECT_ID_PRODUCTION"
+          test -n "$FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS"
+
       - name: Deploy to Firebase Hosting (Production)
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YEYO_SYSTEMS }}
-          projectId: yeyo-systems
+          projectId: ${{ env.FIREBASE_PROJECT_ID_PRODUCTION }}
           channelId: live
