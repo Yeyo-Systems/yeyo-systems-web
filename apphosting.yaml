@@ -1,6 +1,10 @@
-# ============================================================
-# Firebase App Hosting Configuration for Next.js App Router
-# ============================================================
+# Shared Firebase App Hosting runtime configuration.
+#
+# This file intentionally contains no project identifier, Firebase Web SDK
+# configuration, or secret value. A backend must be attached only to an
+# isolated Firebase project, and its environment values must be configured in
+# the backend settings or in an environment-specific apphosting.<env>.yaml.
+# Never use NEXT_PUBLIC_ variables for secrets.
 
 runConfig:
   minInstances: 0
@@ -9,18 +13,4 @@ runConfig:
   cpu: 1
   memoryMiB: 1024
 
-env:
-  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: "AIzaSyDeYhoDLX7-fmWOUjAQdlrq-cFiOS1rP-Q"
-  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-    value: "yeyo-systems.firebaseapp.com"
-  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
-    value: "yeyo-systems"
-  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-    value: "yeyo-systems.firebasestorage.app"
-  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-    value: "867937526837"
-  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    value: "1:867937526837:web:a2ec1362ba9fe52fb83d7c"
-  - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
-    value: "G-TF25C8921B"
+# Environment values are configured per backend, outside this shared file.

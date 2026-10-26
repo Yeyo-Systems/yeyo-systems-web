@@ -33,7 +33,7 @@ Infrastructure (infrastructure/repositories/ + datasources/)
 
 ### Reglas Invariantes
 - **Dominio Puro (`src/domain/`)**: Cero dependencias de Next.js, React o Firebase.
-- **Aislamiento de Seguridad**: Las apps de producción (Khatu en Supabase, Cortex en Firebase/PostgreSQL) envían métricas anónimas hacia `/api/metrics/sync` mediante solicitudes de servidor a servidor (S2S) autenticadas con `Bearer {SYNC_API_SECRET}`. La web sólo lee la colección aislada `public_app_metrics`.
+- **Aislamiento de Seguridad**: La web sólo lee la colección aislada `public_app_metrics`. El diseño de métricas S2S autenticadas con `Bearer {SYNC_API_SECRET}` requiere un runtime de servidor aprobado; el export estático actual no acepta solicitudes `POST` en `/api/metrics/sync`.
 - **Diseño & Paleta Corporativa**:
   - **Dark Mode**: Fondo `#0B0F17` (Gris humo profundo), superficie `#1E293B`, texto `#F8FAFC`.
   - **Light Mode**: Fondo `#F8FAFC`, superficie `#FFFFFF`, texto `#0F172A`.
@@ -72,8 +72,12 @@ npm install
 ### Variables de Entorno
 Copia el archivo de ejemplo y configura tus variables:
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
+
+Usa únicamente un proyecto Firebase aislado para desarrollo. Consulta
+[`docs/development-environment.md`](docs/development-environment.md) antes de
+configurar GitHub Actions, Firebase Hosting o App Hosting.
 
 ### Ejecutar Servidor de Desarrollo
 ```bash
