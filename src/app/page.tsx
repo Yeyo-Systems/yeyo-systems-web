@@ -26,16 +26,22 @@ export default function HomePage() {
           <div className="text-center max-w-4xl mx-auto">
 
             <div className="flex justify-center mb-8">
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden p-1 bg-smoke border border-line shadow-lg flex items-center justify-center">
-                <Image
-                  src="/brand/yeyo-mark.webp"
-                  alt="Logo de Yeyo Systems"
-                  width={112}
-                  height={112}
-                  className="w-full h-full object-contain"
-                  priority
-                />
-              </div>
+              <Image
+                src="/brand/logo-light.webp"
+                alt="Yeyo Systems — Multi-Platform Ecosystem"
+                width={840}
+                height={307}
+                className="w-72 sm:w-96 h-auto dark:hidden"
+                priority
+              />
+              <Image
+                src="/brand/logo-dark.webp"
+                alt="Yeyo Systems — Multi-Platform Ecosystem"
+                width={840}
+                height={307}
+                className="w-72 sm:w-96 h-auto hidden dark:block"
+                priority
+              />
             </div>
 
             <p className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-line bg-surface text-fg-muted text-sm font-medium mb-6">
