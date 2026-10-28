@@ -13,7 +13,6 @@ interface PlatformModalProps {
 interface PlatformLink {
   label: string;
   url: string;
-  icon: string;
   description: string;
 }
 
@@ -25,7 +24,6 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'Google Play',
       url: appLinks.playStore,
-      icon: '▶',
       description: 'Descargar para Android',
     });
   }
@@ -33,7 +31,6 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'App Store',
       url: appLinks.appStore,
-      icon: '🍎',
       description: 'Descargar para iOS',
     });
   }
@@ -41,7 +38,6 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'Web App',
       url: appLinks.web,
-      icon: '🌐',
       description: 'Acceder desde el navegador',
     });
   }
@@ -49,7 +45,6 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'macOS',
       url: appLinks.macOS,
-      icon: '🖥',
       description: 'Descargar para macOS',
     });
   }
@@ -57,7 +52,6 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'Windows',
       url: appLinks.windows,
-      icon: '🪟',
       description: 'Descargar para Windows',
     });
   }
@@ -65,7 +59,6 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'Linux',
       url: appLinks.linux,
-      icon: '🐧',
       description: 'Descargar para Linux',
     });
   }
@@ -73,7 +66,6 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'GitHub',
       url: appLinks.github,
-      icon: '⬡',
       description: 'Ver código fuente',
     });
   }
@@ -81,7 +73,6 @@ function getLinksForApp(app: AppProduct): PlatformLink[] {
     links.push({
       label: 'Documentación',
       url: appLinks.docs,
-      icon: '📖',
       description: 'Ver documentación',
     });
   }
@@ -103,7 +94,7 @@ export function PlatformModal({ app, isOpen, onClose }: PlatformModalProps) {
       {/* Platform Links */}
       <div className="p-6 space-y-3">
         {platformLinks.length === 0 ? (
-          <p className="text-center text-slate-400 py-8">
+          <p className="text-center text-fg-muted py-8">
             No hay plataformas disponibles aún.
           </p>
         ) : (
@@ -115,25 +106,22 @@ export function PlatformModal({ app, isOpen, onClose }: PlatformModalProps) {
               rel="noopener noreferrer"
               className="
                 flex items-center gap-4 p-4
-                rounded-xl border border-slate-200 dark:border-slate-800
-                hover:border-indigo-500/50 dark:hover:border-indigo-500/50
-                hover:bg-indigo-50/50 dark:hover:bg-indigo-500/5
-                transition-all duration-200 group
+                rounded-xl border border-line
+                hover:border-brand/50 hover:bg-brand/5
+                transition-colors duration-200 group
               "
             >
-              <span className="text-2xl w-8 text-center flex-shrink-0">
-                {link.icon}
-              </span>
               <div className="flex-1">
-                <div className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
+                <div className="font-semibold text-fg text-sm">
                   {link.label}
                 </div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">
+                <div className="text-xs text-fg-muted">
                   {link.description}
                 </div>
               </div>
               <svg
-                className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors duration-200"
+                aria-hidden="true"
+                className="w-4 h-4 text-fg-muted group-hover:text-brand-fg transition-colors duration-200"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -148,9 +136,9 @@ export function PlatformModal({ app, isOpen, onClose }: PlatformModalProps) {
 
       {/* Version info if available */}
       {app.metrics?.latestVersion && (
-        <div className="px-6 pb-6 border-t border-slate-100 dark:border-slate-800/60 pt-4">
-          <p className="text-center text-xs text-slate-400">
-            Versión actual: <span className="font-mono font-semibold text-slate-600 dark:text-slate-300">{app.metrics.latestVersion}</span>
+        <div className="px-6 pb-6 border-t border-line pt-4">
+          <p className="text-center text-xs text-fg-muted">
+            Versión actual: <span className="font-mono font-semibold text-fg">{app.metrics.latestVersion}</span>
           </p>
         </div>
       )}

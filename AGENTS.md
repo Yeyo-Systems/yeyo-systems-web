@@ -46,8 +46,9 @@ Infrastructure (infrastructure/repositories/ + datasources/)
 
 | App | Estado | Descripción |
 |-----|--------|-------------|
-| Khatu | Production | App principal — datos en Supabase (AISLADO) |
-| Cortex | Beta | IA multiplataforma — Firebase/PostgreSQL (AISLADO) |
-| Saberio | Beta | Plataforma educativa (AISLADO) |
-| Khatu Services | Alpha | Servicios B2B |
-| Amateur Things | Development | Proyectos experimentales |
+| Khatu | Alpha | Ventas e inventario (versión telas) — datos en Supabase (AISLADO) |
+| Cortex | Alpha | Gestión educativa, Ley 070 — no es una app de IA (AISLADO) |
+| Saberio | Alpha | Venta de cursos y contenido educativo (AISLADO) |
+| Khatu Services | En diseño | Reservas y cobro de servicios (nombre provisional) |
+| Penitentiary | En desarrollo | Gestión de información penitenciaria (web) |
+| Amateur Things | Alpha | Contenido para adultos — no listado en el sitio |
