@@ -83,9 +83,9 @@ los tokens no cubren.
 ## Animaciones y Micro-interacciones
 
 - **Duración estándar**: `duration-200`, con `transition-colors` o `transition-[box-shadow,border-color]`
-- **Hover en cards**: cambio de sombra y borde (`hover:shadow-md hover:border-brand/40`); sin `scale` ni glow
+- **Cards de apps**: cada app tiene su color de acento (`accentColor`, HEX `#RRGGBB`, validado con `resolveAccentColor`). Se pasa como variable CSS `--app-accent` en `style` (única excepción a "sin estilos inline": el color es un dato de la app) y las clases lo usan en la franja superior, el ícono, el borde y el brillo al pasar el mouse. Hover: elevación `-translate-y-1` y sombra; sin `scale`
 - **Elementos "Live"**: `animate-pulse` solo en el punto indicador, no en texto
-- **Sin adornos**: sin resplandores difuminados, degradados en titulares ni glassmorphism decorativo. Única excepción: el brillo ambiental del hero (`bg-hero-glow`), un degradado radial con el indigo de marca cuya intensidad sale de los tokens `--glow-core` y `--glow-halo` de cada tema
+- **Sin adornos**: sin resplandores difuminados, degradados en titulares ni glassmorphism decorativo. Excepciones: el brillo ambiental del hero (`bg-hero-glow`), un degradado radial con el indigo de marca cuya intensidad sale de los tokens `--glow-core` y `--glow-halo` de cada tema; el subrayado ondulado de "transforman" (`var(--brand)` → `var(--glow-accent)`); y el acento por app de las cards
 - **Modales**: `animate-fade-in` (overlay) y `animate-scale-in` (diálogo)
 - **`prefers-reduced-motion`** desactiva animaciones y transiciones (ya en `globals.css`)
 

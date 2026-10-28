@@ -52,7 +52,30 @@ export default function HomePage() {
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-fg tracking-tight leading-[1.08] mb-6">
               Construimos apps que{' '}
-              <span className="text-brand-fg">transforman</span>{' '}
+              <span className="relative inline-block">
+                <span className="text-brand-fg">transforman</span>
+                <svg
+                  aria-hidden="true"
+                  className="absolute -bottom-2 left-0 w-full"
+                  height="8"
+                  viewBox="0 0 100 8"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="hero-underline" x1="0" x2="1" y1="0" y2="0">
+                      <stop offset="0%" stopColor="var(--brand)" />
+                      <stop offset="100%" stopColor="var(--glow-accent)" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M0 6 Q25 2 50 5 Q75 8 100 4"
+                    stroke="url(#hero-underline)"
+                    strokeWidth="2.5"
+                    fill="none"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>{' '}
               vidas.
             </h1>
 

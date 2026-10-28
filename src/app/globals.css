@@ -24,6 +24,7 @@
   --scrollbar: #CBD5E1;
   --glow-core: color-mix(in srgb, var(--brand) 16%, transparent);
   --glow-halo: color-mix(in srgb, var(--brand) 7%, transparent);
+  --glow-accent: #818CF8;
 }
 
 .dark {
@@ -40,6 +41,7 @@
   --scrollbar: #334155;
   --glow-core: color-mix(in srgb, var(--brand) 32%, transparent);
   --glow-halo: color-mix(in srgb, var(--brand-fg) 9%, transparent);
+  --glow-accent: #A5B4FC;
 }
 
 @theme inline {

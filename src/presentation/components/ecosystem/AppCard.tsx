@@ -6,6 +6,7 @@ import {
   getCategoryLabel,
   getStatusLabel,
   isActiveStatus,
+  resolveAccentColor,
   showsPublicMetrics,
 } from '@/domain/entities/AppProduct';
 import { formatDownloads, formatRating } from '@/domain/entities/AppMetric';
@@ -29,24 +30,35 @@ export function AppCard({ app }: AppCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isActive = isActiveStatus(app.status);
   const metrics = showsPublicMetrics(app) ? app.metrics : undefined;
-  const chips = [...app.stack, ...app.platforms.map((platform) => PLATFORM_LABELS[platform])];
-  const uniqueChips = Array.from(new Set(chips));
+  const chips = Array.from(
+    new Set([...app.stack, ...app.platforms.map((platform) => PLATFORM_LABELS[platform])])
+  );
+  const accentStyle = { '--app-accent': resolveAccentColor(app.accentColor) } as React.CSSProperties;
 
   return (
     <>
       <article
+        style={accentStyle}
         className="
-          flex flex-col
+          group relative flex flex-col
           bg-surface border border-line
           rounded-2xl overflow-hidden
-          shadow-sm hover:shadow-md hover:border-brand/40
-          transition-[box-shadow,border-color] duration-200
+          shadow-sm hover:shadow-xl hover:shadow-brand/10 dark:hover:shadow-smoke/50
+          transition-all duration-300 ease-out
+          hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--app-accent)_45%,transparent)]
         "
       >
+        <div aria-hidden="true" className="h-1 w-full opacity-80 bg-[var(--app-accent)]" />
+
         <div className="p-6 flex items-start gap-4">
           <div
             aria-hidden="true"
-            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-brand/10 border border-brand/20 text-brand-fg text-lg font-bold"
+            className="
+              w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg
+              text-2xl font-black text-[var(--app-accent)] dark:text-fg
+              bg-linear-135 from-[color-mix(in_srgb,var(--app-accent)_13%,transparent)] to-[color-mix(in_srgb,var(--app-accent)_25%,transparent)]
+              border border-[color-mix(in_srgb,var(--app-accent)_19%,transparent)]
+            "
           >
             {app.name.charAt(0)}
           </div>
@@ -60,15 +72,15 @@ export function AppCard({ app }: AppCardProps) {
                 {getStatusLabel(app.status)}
               </Badge>
             </div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-brand-fg mt-1">
-              {getCategoryLabel(app.category)}
+            <p className="text-sm text-fg-muted mt-0.5 font-medium">
+              {app.tagline}
             </p>
           </div>
         </div>
 
         <div className="px-6 pb-4 space-y-3">
-          <p className="text-sm font-medium text-fg">
-            {app.tagline}
+          <p className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
+            {getCategoryLabel(app.category)}
           </p>
           <p className="text-sm text-fg-muted leading-relaxed">
             {app.description}
@@ -79,7 +91,7 @@ export function AppCard({ app }: AppCardProps) {
           <ul className="px-6 pb-4 space-y-1.5">
             {app.highlights.map((highlight) => (
               <li key={highlight} className="flex items-start gap-2 text-sm text-fg">
-                <svg aria-hidden="true" className="w-4 h-4 mt-0.5 flex-shrink-0 text-brand-fg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg aria-hidden="true" className="w-4 h-4 mt-0.5 flex-shrink-0 text-[var(--app-accent)] dark:text-fg-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 {highlight}
@@ -120,9 +132,9 @@ export function AppCard({ app }: AppCardProps) {
           </div>
         )}
 
-        {uniqueChips.length > 0 && (
-          <div className="px-6 pb-6 pt-2 flex flex-wrap gap-1.5 mt-auto">
-            {uniqueChips.map((chip) => (
+        {chips.length > 0 && (
+          <div className="px-6 pb-4 flex flex-wrap gap-1.5 mt-auto">
+            {chips.map((chip) => (
               <span
                 key={chip}
                 className="px-2 py-0.5 rounded-md text-xs font-medium bg-surface-muted text-fg-muted border border-line"
@@ -133,8 +145,8 @@ export function AppCard({ app }: AppCardProps) {
           </div>
         )}
 
-        {app.isAvailable && (
-          <div className="px-6 pb-6">
+        <div className="px-6 pb-6">
+          {app.isAvailable ? (
             <Button
               variant="primary"
               size="md"
@@ -148,8 +160,17 @@ export function AppCard({ app }: AppCardProps) {
             >
               Ver plataformas
             </Button>
-          </div>
-        )}
+          ) : (
+            <div className="w-full py-2.5 px-4 rounded-xl bg-surface-muted text-center">
+              <span className="text-sm text-fg-muted font-medium">Próximamente</span>
+            </div>
+          )}
+        </div>
+
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,color-mix(in_srgb,var(--app-accent)_7%,transparent)_0%,transparent_70%)]"
+        />
       </article>
 
       {isModalOpen && (
