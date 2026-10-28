@@ -4,6 +4,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). P
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-28
+
 ### FEATURE
 
 - [FEATURE] YS-3 - Sistema de diseño: tokens semánticos, fix de tema y franja de tecnologías
