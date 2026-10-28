@@ -74,7 +74,9 @@ Con la cuenta propietaria del proyecto:
 
 1. Google Cloud Console → IAM → Service Accounts → *Create service account*
    (por ejemplo `github-hosting-deploy`).
-2. Roles: **Firebase Hosting Admin** y **API Keys Viewer**.
+2. Roles: **Firebase Hosting Admin**, **API Keys Viewer** y **Service Usage
+   Consumer** (sin este último, el CLI falla con `403 Permission denied to get
+   service [firebasehosting.googleapis.com]`).
 3. *Keys → Add key → JSON* y pegue el contenido en el secreto
    `FIREBASE_SERVICE_ACCOUNT` del environment correspondiente. Elimine el
    archivo local después.
