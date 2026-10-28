@@ -1,0 +1,90 @@
+# Yeyo Systems Web — reglas para agentes (Google Antigravity / Cursor)
+
+> `.antigravityrules` y `.cursorrules` tienen el mismo contenido. El detalle canónico está en `.agents/rules/`; Cursor lo carga desde `.cursor/rules/*.mdc`. Al cambiar una regla se actualizan todos en el mismo PR.
+
+## Proyecto
+
+- Sitio institucional de Yeyo Systems: la empresa y su ecosistema de apps (en producción, en desarrollo, en diseño).
+- Solo **consume** resúmenes públicos que cada app publica en Firestore desde su backend. Nunca lee las bases de datos de las apps (Supabase, etc.).
+- Stack:
+  - Next.js 16 App Router con export estático (`output: 'export'`), React 19, TypeScript strict.
+  - Tailwind CSS v4, next-themes, Firebase 12 (Firestore `onSnapshot`).
+  - Estado: React state + custom hooks. No usar Zustand, Redux ni SWR.
+- Firebase Hosting no ejecuta route handlers; la ingesta server-side va en Cloud Functions.
+- Entornos:
+  - `develop` → `yeyo-systems-web` (`https://yeyo-systems-web.web.app`)
+  - `master` → `yeyo-systems` (`https://yeyosystems.com`)
+  - Detalle en `docs/development-environment.md`.
+- Comandos: `npm run lint`, `npm run typecheck`, `npm run build`.
+
+## Acciones restringidas (CRÍTICO)
+
+- Sin orden explícita del usuario: no `git commit`, no `git push`, no crear ni fusionar PRs, no marcar Ready for review.
+- No desplegar ni modificar recursos de Firebase, GitHub Environments, secretos, DNS, dominios, `master` ni producción.
+- Nunca `git push --force` a `develop` o `master`.
+- Nunca pedir contraseñas, claves privadas ni tokens por chat; nunca imprimir secretos.
+
+## Ciclo de una tarea
+
+1. GitHub Issue con alcance y criterios de aceptación. Id de tarea `YS-<N>` = número de la issue.
+2. Rama desde `develop` actualizado (`git pull --ff-only`): `<type>/YS-<N>-<kebab>`. Tipos: `feature`, `fix`, `hotfix`, `chore`, `refactor`, `docs`, `test`, `perf`, `build`.
+3. Plan numerado visible en el chat (alcance, archivos, riesgos, pasos, pruebas). No editar `src/` hasta que el usuario lo apruebe.
+4. Implementar una subtarea a la vez.
+5. PR en **Draft** hacia `develop`:
+   - Título `[TYPE] YS-N - Título`.
+   - Plantilla `.github/PULL_REQUEST_TEMPLATE.md`.
+   - `Closes #N` en texto plano, nunca entre backticks.
+6. Ready for review solo con CI verde y documentación aprobada. Merge **squash** solo a pedido.
+7. La rama por defecto es `master`: al fusionar en `develop`, la issue se cierra a mano.
+8. Releases: PR `develop → master` titulado `[RELEASE] vX.Y.Z`; CI solo permite `develop` o `hotfix/*` hacia `master`.
+
+## Arquitectura (CRÍTICO)
+
+- `src/domain/`: TypeScript puro; prohibido importar `next/*`, `react`, `firebase/*`, `@supabase/*` o cualquier paquete npm.
+- `src/infrastructure/`: implementa contratos de `src/domain/repositories/` y mapea errores externos.
+- `src/presentation/components/`: solo usan hooks de `src/presentation/hooks/`; los hooks llaman use cases.
+- Nombres:
+  - Entidades: `PascalCase.ts`
+  - Interfaces de repositorio: `IAppRepository.ts`
+  - Use cases: `VerbNounUseCase.ts`
+  - Datasources: `ProviderNounDataSource.ts`
+  - Hooks: `useCamelCase.ts`
+- Imports con `@/`; nunca relativos que suban más de un nivel.
+- Detalle: `.agents/rules/clean-architecture.md`.
+
+## Seguridad (CRÍTICO)
+
+- Nunca credenciales de Supabase, Khatu, Cortex, Saberio ni de otras bases de datos de las apps.
+- Nunca secretos con `NEXT_PUBLIC_`; `FIREBASE_ADMIN_*` y `SYNC_API_SECRET` solo en servidor.
+- Firestore:
+  - Lectura pública solo de datos públicos agregados.
+  - Escritura de clientes denegada (`allow write: if false`).
+  - Las escrituras llegan por Admin SDK desde funciones de servidor que validan el `appId` de cada app.
+- Las apps publican su resumen desde su backend, nunca desde el cliente Flutter.
+- `develop` nunca se conecta a producción.
+- Detalle: `.agents/rules/security-isolation.md`.
+
+## Estilos
+
+- Tokens semánticos de `src/app/globals.css`: `bg-page`, `bg-surface`, `text-fg`, `text-fg-muted`, `border-line`, `bg-brand`, `text-brand-fg`, `bg-live`.
+- Prohibido:
+  - Hex sueltos, colores inline o fuera de paleta
+  - Glassmorphism, `hover:scale`, glow
+  - Emojis como iconos
+- Mobile-first; `prefers-reduced-motion`; contraste AA; textos visibles en español.
+- Detalle: `.agents/rules/styling-theme.md`.
+
+## Calidad
+
+- **try/catch:**
+  - Prohibido: catch vacíos, `.catch(() => {})`, `console.error` como única acción, retornos silenciosos, `error.message` crudo en la UI, `catch (e: any)`, promesas sin manejar.
+  - Validar datos externos con type guards.
+  - Detalle: `.agents/rules/error-handling.md`.
+- **Comentarios:** nuevos en inglés y solo para restricciones que el código no muestra. Sin `TODO`, `FIXME`, `YS-N`, `#N` ni números de PR en `src/`.
+- **Tests:** solo de alto valor (reglas de dominio con ramas, validación de payloads, mapeos no triviales). Sin tests de mocks llamados ni de "renderiza".
+- **Autorrevisión:**
+  - lint, typecheck y build en verde
+  - revisión de try/catch
+  - entrada en `CHANGELOG.md` (`- [TYPE] YS-N - Descripción` bajo `## [Unreleased]`, agrupada por tipo y ordenada por número)
+- **Versión:** la de `package.json` solo cambia en el PR de release (ver `VERSIONING.md`).
+- **Verificación manual:** toda entrega incluye "Cómo probarlo" (export estático local o `https://yeyo-systems-web.web.app`, pasos, resultado esperado). Docs-only → N/A. Detalle: `.agents/rules/manual-verification.md`.

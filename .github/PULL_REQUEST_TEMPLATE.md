@@ -1,13 +1,15 @@
 <!--
-  Título: [TYPE] Título breve
+  Título: [TYPE] YS-N - Título breve
   Tipos: [FEATURE] [FIX] [HOTFIX] [CHORE] [REFACTOR] [DOCS] [TEST] [PERF] [BUILD] [RELEASE]
-  Base: develop (releases y hotfixes hacia master)
+  Base: develop (releases y hotfixes hacia master). Abrir como Draft.
+  Closes #N va en texto plano: entre backticks GitHub no lo reconoce.
 -->
 
 # Task
 
 - **Issue:** https://github.com/Yeyo-Systems/yeyo-systems-web/issues/N
-  `Closes #N`
+
+Closes #N
 
 # Descripción
 
@@ -40,7 +42,7 @@ flowchart LR
 - `npm run lint`:
 - `npm run typecheck`:
 - `npm run build`:
-- Manual (URL de develop / local):
+- Manual (pasos de verificación, local o develop):
 
 ## Checklist de calidad
 
@@ -48,6 +50,8 @@ flowchart LR
 - [ ] Componentes solo consumen hooks de `src/presentation/hooks/`.
 - [ ] Sin secretos ni configuración Firebase en archivos versionados.
 - [ ] Colores dentro de la paleta corporativa; dark mode con `dark:`.
-- [ ] Errores async manejados (try/catch o `.catch()`).
+- [ ] Sin patrones prohibidos de try/catch (`.agents/rules/error-handling.md`).
+- [ ] Comentarios nuevos en inglés; sin `TODO`/`FIXME` ni ids de issue en `src/`.
+- [ ] Entrada en `CHANGELOG.md` bajo `## [Unreleased]`.
 - [ ] Documentación actualizada si cambia el flujo o la arquitectura.
-- [ ] Cuerpo incluye `Closes #N`.
+- [ ] Cuerpo incluye Closes #N en texto plano.

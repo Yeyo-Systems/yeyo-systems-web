@@ -1,0 +1,23 @@
+---
+description: Yeyo Systems web overview, stack, environments and rule index
+alwaysApply: true
+---
+
+# Yeyo Systems Web — overview
+
+Sitio institucional de Yeyo Systems: muestra la empresa y su ecosistema de apps (en producción, en desarrollo, en diseño). Solo **consume** datos públicos resumidos; nunca lee las bases de datos de las apps.
+
+- **Stack:** Next.js 16 App Router con export estático (`output: 'export'`), React 19, TypeScript strict, Tailwind CSS v4 (`@theme inline`, `@custom-variant dark`), next-themes, Firebase 12 (Firestore `onSnapshot`).
+- **Sin servidor en Hosting:** los route handlers de `src/app/api` no se ejecutan en Firebase Hosting; la ingesta server-side necesita Cloud Functions.
+- **Entornos:** `develop` → proyecto `yeyo-systems-web` (`https://yeyo-systems-web.web.app`); `master` → proyecto `yeyo-systems` (`https://yeyosystems.com`). Ver `docs/development-environment.md`.
+- **Comandos:** `npm run lint`, `npm run typecheck`, `npm run build`.
+- **Estado:** React state + custom hooks. No usar Zustand, Redux ni SWR.
+
+Reglas detalladas (fuente canónica en `.agents/rules/`):
+
+- Arquitectura: `clean-architecture-and-layers.mdc`
+- Seguridad: `security-isolation.mdc`
+- Estilos: `styling-and-ui.mdc`
+- Errores: `error-handling-try-catch.mdc`
+- Flujo Git/GitHub: `workflow-git-github-changelog.mdc`
+- Verificación manual: `manual-verification.mdc`

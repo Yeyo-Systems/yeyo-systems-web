@@ -1,0 +1,17 @@
+---
+description: Clean Architecture layers and dependency direction for src/
+globs: src/**/*.ts,src/**/*.tsx
+alwaysApply: false
+---
+
+# Clean Architecture
+
+- `src/domain/`: TypeScript puro. Prohibido importar `next/*`, `react`, `firebase/*`, `@supabase/*` o cualquier paquete npm.
+- `src/infrastructure/`: implementa los contratos de `src/domain/repositories/`; datasources `ProviderNounDataSource.ts`; mapea errores externos a errores de dominio.
+- `src/presentation/components/`: solo llaman hooks de `src/presentation/hooks/`; nunca instancian use cases ni repositorios, ni hacen fetch.
+- Hooks: llaman use cases; exponen `data`, `isLoading`, `error`.
+- Nombres: entidades `PascalCase.ts`, interfaces `IAppRepository.ts`, use cases `VerbNounUseCase.ts`, hooks `useCamelCase.ts`.
+- Imports con alias `@/`; nunca relativos que suban más de un nivel.
+- Reutilizar patrones existentes antes de crear otros nuevos.
+
+Detalle: @.agents/rules/clean-architecture.md

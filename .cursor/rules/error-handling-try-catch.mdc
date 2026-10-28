@@ -1,0 +1,14 @@
+---
+description: Forbidden and required try/catch patterns in TypeScript
+globs: src/**/*.ts,src/**/*.tsx
+alwaysApply: false
+---
+
+# Error handling — try/catch
+
+- Prohibido: `catch {}`, `.catch(() => {})`, `console.error` como única acción en flujos críticos, `return []`/`null` silencioso, `error.message` crudo en la UI, `catch (e: any)`, promesas sin manejar.
+- Validar datos externos con type guards antes que capturar excepciones.
+- Infraestructura mapea errores del SDK o de red a errores de dominio; hooks los exponen como estado `error` con mensaje en español.
+- Revisar cada `catch` de los archivos tocados antes de pasar el PR a Ready for review.
+
+Detalle: @.agents/rules/error-handling.md

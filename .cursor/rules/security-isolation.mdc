@@ -1,0 +1,15 @@
+---
+description: Security isolation — no production credentials, read-only public data
+alwaysApply: true
+---
+
+# Security isolation
+
+- Nunca credenciales de Supabase, Khatu, Cortex, Saberio, Khatu Services ni de otras bases de datos de las apps.
+- Nunca secretos con prefijo `NEXT_PUBLIC_`; `FIREBASE_ADMIN_*` y `SYNC_API_SECRET` solo en servidor.
+- Nunca hardcodear claves ni tokens; nunca imprimir secretos en la salida ni pedirlos por chat.
+- Firestore: lectura pública solo de datos públicos agregados; `allow write: if false` para clientes. Las escrituras llegan solo por Admin SDK desde funciones de servidor, validando el `appId` de cada app.
+- Las apps del ecosistema **empujan** un resumen a Firestore desde su backend (nunca desde el cliente Flutter); este sitio no lee sus bases de datos.
+- `develop` nunca se conecta a servicios de producción.
+
+Detalle: @.agents/rules/security-isolation.md
