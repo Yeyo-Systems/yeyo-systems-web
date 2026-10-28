@@ -1,7 +1,10 @@
 # Yeyo Systems — Web Platform
 
 <p align="center">
-  <img src="public/logo.svg" alt="Yeyo Systems Logo" width="560" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/brand/logo-dark.png" />
+    <img src="public/brand/logo-light.png" alt="Yeyo Systems — Multi-Platform Ecosystem" width="520" />
+  </picture>
 </p>
 
 <p align="center">

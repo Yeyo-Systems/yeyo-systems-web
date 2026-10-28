@@ -7,7 +7,7 @@ alwaysApply: false
 # Styling & UI
 
 - Usar tokens semánticos (`bg-page`, `bg-surface`, `bg-surface-muted`, `text-fg`, `text-fg-muted`, `border-line`, `bg-brand`, `text-brand-fg`, `bg-live`) definidos en `src/app/globals.css`; cambian solos con `.dark`.
-- Prohibido: hex sueltos, colores inline, colores fuera de la paleta, glassmorphism, `hover:scale`, glow y emojis como iconos.
+- Prohibido: hex sueltos, colores inline, colores fuera de la paleta, glassmorphism, `hover:scale`, glow (excepto el brillo ambiental del hero `bg-hero-glow` y el acento por app `--app-accent`, que viene del dato `accentColor`) y emojis como iconos.
 - Iconos SVG monocromos (`currentColor`) con `aria-hidden="true"`.
 - Mobile-first; respetar `prefers-reduced-motion`; contraste AA.
 - Textos visibles en español.

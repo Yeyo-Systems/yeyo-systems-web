@@ -21,21 +21,28 @@ export default function HomePage() {
       {/* =============================================
           HERO SECTION
       ============================================= */}
-      <section className="min-h-[80vh] flex items-center">
+      <section className="relative isolate overflow-hidden min-h-[80vh] flex items-center">
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-hero-glow pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
           <div className="text-center max-w-4xl mx-auto">
 
             <div className="flex justify-center mb-8">
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden p-1 bg-smoke border border-line shadow-lg flex items-center justify-center">
-                <Image
-                  src="/icon.svg"
-                  alt="Yeyo Systems"
-                  width={112}
-                  height={112}
-                  className="w-full h-full object-contain"
-                  priority
-                />
-              </div>
+              <Image
+                src="/brand/logo-light.webp"
+                alt="Yeyo Systems — Multi-Platform Ecosystem"
+                width={840}
+                height={307}
+                className="w-72 sm:w-96 h-auto dark:hidden"
+                priority
+              />
+              <Image
+                src="/brand/logo-dark.webp"
+                alt="Yeyo Systems — Multi-Platform Ecosystem"
+                width={840}
+                height={307}
+                className="w-72 sm:w-96 h-auto hidden dark:block"
+                priority
+              />
             </div>
 
             <p className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-line bg-surface text-fg-muted text-sm font-medium mb-6">
@@ -45,7 +52,32 @@ export default function HomePage() {
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-fg tracking-tight leading-[1.08] mb-6">
               Construimos apps que{' '}
-              <span className="text-brand-fg">transforman</span>{' '}
+              <span className="relative inline-block">
+                <span className="bg-linear-to-r from-brand via-brand-violet to-brand-light bg-clip-text text-transparent">
+                  transforman
+                </span>
+                <svg
+                  aria-hidden="true"
+                  className="absolute -bottom-2 left-0 w-full"
+                  height="8"
+                  viewBox="0 0 100 8"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="hero-underline" x1="0" x2="1" y1="0" y2="0">
+                      <stop offset="0%" stopColor="var(--brand)" />
+                      <stop offset="100%" stopColor="var(--color-brand-violet)" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M0 6 Q25 2 50 5 Q75 8 100 4"
+                    stroke="url(#hero-underline)"
+                    strokeWidth="2.5"
+                    fill="none"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>{' '}
               vidas.
             </h1>
 
@@ -134,7 +166,7 @@ export default function HomePage() {
             <div>
               <h2 className="text-4xl font-bold text-fg mb-6">
                 Tecnología con{' '}
-                <span className="text-brand-fg">propósito</span>
+                <span className="text-brand-emphasis">propósito</span>
               </h2>
               <div className="space-y-4 text-lg text-fg-muted leading-relaxed">
                 <p>

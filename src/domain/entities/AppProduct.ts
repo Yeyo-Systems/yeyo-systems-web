@@ -42,6 +42,8 @@ export interface AppProduct {
   readonly description: string;
   readonly status: AppStatus;
   readonly category: AppCategory;
+  /** Brand color of the app as `#RRGGBB`; drives the card accent. */
+  readonly accentColor: string;
   /** Key capabilities, most relevant first. */
   readonly highlights: ReadonlyArray<string>;
   /** Next planned capabilities. */
@@ -71,6 +73,18 @@ export function getStatusLabel(status: AppStatus): string {
   };
   return labels[status];
 }
+
+/** Display order for status filters, most mature first. */
+export const APP_STATUS_ORDER: ReadonlyArray<AppStatus> = [
+  'production',
+  'maintenance',
+  'beta',
+  'alpha',
+  'development',
+  'design',
+  'planned',
+  'deprecated',
+];
 
 export function getCategoryLabel(category: AppCategory): string {
   const labels: Record<AppCategory, string> = {
@@ -122,4 +136,12 @@ export function isActiveStatus(status: AppStatus): boolean {
 /** Public metrics are shown only for apps in production. */
 export function showsPublicMetrics(app: AppProduct): boolean {
   return getAppStage(app.status) === 'production';
+}
+
+const DEFAULT_ACCENT_COLOR = '#4F46E5';
+const HEX_COLOR = /^#[0-9A-Fa-f]{6}$/;
+
+/** Accent color safe to render; external data may carry invalid values. */
+export function resolveAccentColor(color: string | undefined): string {
+  return color && HEX_COLOR.test(color) ? color : DEFAULT_ACCENT_COLOR;
 }

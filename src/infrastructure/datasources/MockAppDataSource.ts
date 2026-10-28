@@ -18,6 +18,7 @@ const CATALOG: AppProduct[] = [
       'Gestión de ventas, depósitos y tiendas. La versión actual está especializada en la venta de telas: producto por rollo entre sucursales y venta por rollo o por metro desde tienda o depósito.',
     status: 'alpha',
     category: 'sales',
+    accentColor: '#4F46E5',
     highlights: [
       'Punto de venta por rollo y por metro',
       'Depósitos, tiendas y traspasos entre sucursales',
@@ -46,6 +47,7 @@ const CATALOG: AppProduct[] = [
       'Plataforma educativa que cubre la administración académica completa. En colegios está adaptada a la Ley 070 para la gestión docente, con seguimiento para padres y alumnos.',
     status: 'alpha',
     category: 'education',
+    accentColor: '#7C3AED',
     highlights: [
       'Registros de gestión modular y semanal (Ley 070)',
       'Periodos bimestrales, trimestrales, semestrales y anuales',
@@ -67,6 +69,7 @@ const CATALOG: AppProduct[] = [
       'Plataforma para publicar contenido educativo de todo tipo y venderlo como cursos en línea.',
     status: 'alpha',
     category: 'education',
+    accentColor: '#0891B2',
     highlights: [
       'Cursos en línea de cualquier tema',
       'Venta de cursos y contenido',
@@ -86,6 +89,7 @@ const CATALOG: AppProduct[] = [
       'Para negocios cuyo ingreso son los servicios y no los productos: consultorios médicos y odontológicos, psicólogos, plomeros, carpinteros y más.',
     status: 'design',
     category: 'services',
+    accentColor: '#059669',
     highlights: [
       'Reservas y agenda de atención',
       'Servicios registrados como productos',
@@ -105,6 +109,7 @@ const CATALOG: AppProduct[] = [
       'Sistema web para que el penal administre los registros de las personas privadas de libertad y la información que necesita su consejo.',
     status: 'development',
     category: 'institutional',
+    accentColor: '#475569',
     highlights: [
       'Estado del proceso, condena y fechas de ingreso y salida',
       'Permisos y certificados',
@@ -125,6 +130,7 @@ const CATALOG: AppProduct[] = [
       'Plataforma para compartir contenido para adultos y generar ingresos con él.',
     status: 'alpha',
     category: 'content',
+    accentColor: '#D97706',
     highlights: [],
     stack: ['Flutter'],
     platforms: ['android', 'ios', 'web'],
