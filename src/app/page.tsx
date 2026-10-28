@@ -21,7 +21,8 @@ export default function HomePage() {
       {/* =============================================
           HERO SECTION
       ============================================= */}
-      <section className="min-h-[80vh] flex items-center">
+      <section className="relative isolate overflow-hidden min-h-[80vh] flex items-center">
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-hero-glow pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
           <div className="text-center max-w-4xl mx-auto">
 

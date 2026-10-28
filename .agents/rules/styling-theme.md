@@ -85,7 +85,7 @@ los tokens no cubren.
 - **Duración estándar**: `duration-200`, con `transition-colors` o `transition-[box-shadow,border-color]`
 - **Hover en cards**: cambio de sombra y borde (`hover:shadow-md hover:border-brand/40`); sin `scale` ni glow
 - **Elementos "Live"**: `animate-pulse` solo en el punto indicador, no en texto
-- **Sin adornos**: sin resplandores difuminados, degradados en titulares ni glassmorphism decorativo
+- **Sin adornos**: sin resplandores difuminados, degradados en titulares ni glassmorphism decorativo. Única excepción: el brillo ambiental del hero (`bg-hero-glow`), un degradado radial con el indigo de marca cuya intensidad sale de los tokens `--glow-core` y `--glow-halo` de cada tema
 - **Modales**: `animate-fade-in` (overlay) y `animate-scale-in` (diálogo)
 - **`prefers-reduced-motion`** desactiva animaciones y transiciones (ya en `globals.css`)
 

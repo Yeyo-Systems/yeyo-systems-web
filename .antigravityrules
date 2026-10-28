@@ -69,7 +69,7 @@
 - Tokens semánticos de `src/app/globals.css`: `bg-page`, `bg-surface`, `text-fg`, `text-fg-muted`, `border-line`, `bg-brand`, `text-brand-fg`, `bg-live`.
 - Prohibido:
   - Hex sueltos, colores inline o fuera de paleta
-  - Glassmorphism, `hover:scale`, glow
+  - Glassmorphism, `hover:scale`, glow (excepción: el brillo ambiental del hero, `bg-hero-glow`)
   - Emojis como iconos
 - Mobile-first; `prefers-reduced-motion`; contraste AA; textos visibles en español.
 - Detalle: `.agents/rules/styling-theme.md`.
