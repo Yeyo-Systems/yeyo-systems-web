@@ -19,24 +19,67 @@ export const BRAND_COLORS = {
   emeraldHover: '#059669',
 } as const;
 
+export type TechIconId =
+  | 'flutter'
+  | 'nextjs'
+  | 'firebase'
+  | 'supabase'
+  | 'postgresql'
+  | 'dart'
+  | 'typescript'
+  | 'java'
+  | 'kotlin'
+  | 'swift'
+  | 'sql'
+  | 'android'
+  | 'apple'
+  | 'web'
+  | 'windows'
+  | 'linux';
+
+export interface TechStackItem {
+  readonly name: string;
+  readonly icon: TechIconId;
+}
+
 export interface TechStackGroup {
   readonly label: string;
-  readonly items: ReadonlyArray<string>;
+  readonly items: ReadonlyArray<TechStackItem>;
 }
 
 /** Tecnologías, lenguajes y plataformas con los que trabaja la empresa. */
 export const COMPANY_TECH_STACK: ReadonlyArray<TechStackGroup> = [
   {
     label: 'Tecnologías',
-    items: ['Flutter', 'Next.js', 'Firebase', 'Supabase', 'PostgreSQL'],
+    items: [
+      { name: 'Flutter', icon: 'flutter' },
+      { name: 'Next.js', icon: 'nextjs' },
+      { name: 'Firebase', icon: 'firebase' },
+      { name: 'Supabase', icon: 'supabase' },
+      { name: 'PostgreSQL', icon: 'postgresql' },
+    ],
   },
   {
     label: 'Lenguajes',
-    items: ['Dart', 'TypeScript', 'SQL'],
+    items: [
+      { name: 'Dart', icon: 'dart' },
+      { name: 'TypeScript', icon: 'typescript' },
+      { name: 'Java', icon: 'java' },
+      { name: 'Kotlin', icon: 'kotlin' },
+      { name: 'Swift', icon: 'swift' },
+      { name: 'SQL', icon: 'sql' },
+    ],
   },
   {
     label: 'Plataformas',
-    items: ['Android', 'iOS', 'Web', 'Desktop'],
+    items: [
+      { name: 'Android', icon: 'android' },
+      { name: 'iOS', icon: 'apple' },
+      { name: 'Web', icon: 'web' },
+      { name: 'Windows', icon: 'windows' },
+      { name: 'Linux', icon: 'linux' },
+      { name: 'macOS', icon: 'apple' },
+    ],
   },
 ];
 

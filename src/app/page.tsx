@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { EcosystemGrid } from '@/presentation/components/ecosystem/EcosystemGrid';
 import { MetricsBanner } from '@/presentation/components/metrics/MetricsBanner';
+import { TechIcon } from '@/presentation/components/ui/TechIcon';
 import { COMPANY_TECH_STACK, GITHUB_ORG_URL } from '@/shared/constants';
 
 // ============================================================
@@ -8,7 +9,7 @@ import { COMPANY_TECH_STACK, GITHUB_ORG_URL } from '@/shared/constants';
 // ============================================================
 
 const PRINCIPLES = [
-  { label: 'Multiplataforma', desc: 'Una base de código para Android, iOS, Web y Desktop.' },
+  { label: 'Multiplataforma', desc: 'Una base de código para Android, iOS, Web, Windows, Linux y macOS.' },
   { label: 'Clean Architecture', desc: 'Capas desacopladas y reglas de dependencia estrictas.' },
   { label: 'Datos aislados', desc: 'Cada producto con su propia base de datos y sus propios permisos.' },
   { label: 'Tiempo real', desc: 'Métricas públicas agregadas y actualizadas en vivo.' },
@@ -51,7 +52,7 @@ export default function HomePage() {
             <p className="text-xl sm:text-2xl text-fg-muted leading-relaxed mb-10 max-w-3xl mx-auto">
               Yeyo Systems diseña y construye productos de software con{' '}
               <strong className="text-fg font-semibold">Flutter, Next.js y Clean Architecture</strong>
-              , para Android, iOS, Desktop y la Web.
+              , para Android, iOS, la Web y escritorio (Windows, Linux y macOS).
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -99,10 +100,11 @@ export default function HomePage() {
                   <dd className="flex flex-wrap gap-2 sm:justify-center">
                     {group.items.map((item) => (
                       <span
-                        key={item}
-                        className="px-3 py-1.5 rounded-lg bg-surface border border-line text-sm font-medium text-fg"
+                        key={item.name}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface border border-line text-sm font-medium text-fg"
                       >
-                        {item}
+                        <TechIcon icon={item.icon} className="w-4 h-4 text-fg-muted" />
+                        {item.name}
                       </span>
                     ))}
                   </dd>
@@ -138,7 +140,7 @@ export default function HomePage() {
                 <p>
                   Yeyo Systems nació con la convicción de que el software debe resolver
                   problemas reales de forma elegante y confiable. Usamos <strong className="text-fg">Flutter</strong> para
-                  apps nativas en Android, iOS, Desktop y Web, y <strong className="text-fg">Next.js</strong> para plataformas web.
+                  apps nativas en Android, iOS, Web y escritorio, y <strong className="text-fg">Next.js</strong> para plataformas web.
                 </p>
                 <p>
                   Cada producto de nuestro ecosistema sigue estrictos estándares de <strong className="text-fg">Clean Architecture</strong>,
