@@ -1,0 +1,46 @@
+name: CD Yeyo Systems Web
+
+on:
+  push:
+    branches: [ develop, master ]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Entorno a desplegar (production solo desde master)
+        type: choice
+        options: [ develop, production ]
+        default: develop
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # DEVELOP: merge to develop → https://yeyo-systems-web.web.app
+  deploy-develop:
+    if: >-
+      github.ref == 'refs/heads/develop' &&
+      (github.event_name == 'push' || inputs.target == 'develop')
+    uses: ./.github/workflows/deploy-hosting.yml
+    with:
+      environment: develop
+      expected_project: yeyo-systems-web
+      url: https://yeyo-systems-web.web.app
+    secrets: inherit
+
+  # PRODUCTION: merge develop → master → https://yeyosystems.com
+  # The `production` environment must require reviewer approval.
+  deploy-production:
+    if: >-
+      github.ref == 'refs/heads/master' &&
+      (github.event_name == 'push' || inputs.target == 'production')
+    uses: ./.github/workflows/deploy-hosting.yml
+    with:
+      environment: production
+      expected_project: yeyo-systems
+      url: https://yeyosystems.com
+    secrets: inherit

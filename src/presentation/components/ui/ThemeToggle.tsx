@@ -6,7 +6,7 @@ import { useSyncExternalStore } from 'react';
 const emptySubscribe = () => () => {};
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
@@ -14,10 +14,10 @@ export function ThemeToggle() {
   );
 
   if (!mounted) {
-    return <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse" />;
+    return <div className="w-9 h-9 rounded-xl bg-surface-muted border border-line" />;
   }
 
-  const isDark = theme === 'dark';
+  const isDark = resolvedTheme === 'dark';
 
   return (
     <button
@@ -25,11 +25,11 @@ export function ThemeToggle() {
       className="
         w-9 h-9 rounded-xl
         flex items-center justify-center
-        bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700
-        text-slate-600 dark:text-slate-400
-        transition-all duration-200
-        border border-slate-200 dark:border-slate-700
-        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900
+        bg-surface-muted hover:bg-line
+        text-fg-muted hover:text-fg
+        transition-colors duration-200
+        border border-line
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-page
       "
       aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       title={isDark ? 'Modo claro' : 'Modo oscuro'}

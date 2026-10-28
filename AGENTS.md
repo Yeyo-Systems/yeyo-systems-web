@@ -1,53 +1,71 @@
 # AGENTS.md — Yeyo Systems Web Platform
 
-> Este archivo instruye a los agentes de IA (Google Antigravity, Gemini CLI) sobre las reglas
-> de desarrollo y arquitectura de este repositorio.
+Instrucciones para agentes de IA (Google Antigravity, Cursor, Gemini CLI). Resumen completo en `.antigravityrules` (idéntico a `.cursorrules`); detalle canónico en `.agents/rules/`.
 
-## Reglas Activas
+## Reglas
 
-Todas las reglas de este proyecto se encuentran en `.agents/rules/`. Los agentes **DEBEN**
-leer y aplicar estas reglas antes de realizar cualquier modificación de código.
+| Regla | Archivo | Cursor |
+|---|---|---|
+| Clean Architecture | `.agents/rules/clean-architecture.md` | `.cursor/rules/clean-architecture-and-layers.mdc` |
+| Security Isolation | `.agents/rules/security-isolation.md` | `.cursor/rules/security-isolation.mdc` |
+| Styling & Theme | `.agents/rules/styling-theme.md` | `.cursor/rules/styling-and-ui.mdc` |
+| Manejo de errores | `.agents/rules/error-handling.md` | `.cursor/rules/error-handling-try-catch.mdc` |
+| Flujo Git/GitHub y CHANGELOG | `.agents/rules/workflow-git-github.md` | `.cursor/rules/workflow-git-github-changelog.mdc` |
+| Verificación manual | `.agents/rules/manual-verification.md` | `.cursor/rules/manual-verification.mdc` |
 
-| Regla | Archivo | Descripción |
-|-------|---------|-------------|
-| Clean Architecture | `.agents/rules/clean-architecture.md` | Invariantes de desacoplamiento entre capas |
-| Security Isolation | `.agents/rules/security-isolation.md` | Prohibición de credenciales de producción |
-| Styling & Theme | `.agents/rules/styling-theme.md` | Paleta corporativa y convenciones de UI |
+## Restricciones críticas
 
-## Stack Tecnológico
+1. Sin orden explícita: no commit, push, PR, merge, despliegue ni cambios en Firebase, secretos, DNS o `master`.
+2. No importar Next.js, React, Firebase ni Supabase en `src/domain/`.
+3. No hardcodear credenciales; nunca secretos con `NEXT_PUBLIC_`.
+4. Componentes solo llaman hooks; hooks llaman use cases.
+5. Este sitio solo consume resúmenes públicos en Firestore; nunca lee las bases de datos de las apps.
 
-- **Framework**: Next.js 15+ App Router (TypeScript)
-- **Estilos**: Tailwind CSS v3 + Variables CSS personalizadas
-- **Base de Datos**: Firebase Firestore (solo lectura pública)
-- **Estado**: React Context + Custom Hooks
-- **Arquitectura**: Clean Architecture (Domain / Infrastructure / Presentation)
+## Stack
 
-## Flujo de Capas (INMUTABLE)
+- Next.js 16 App Router con export estático, React 19, TypeScript strict.
+- Tailwind CSS v4 con tokens semánticos, next-themes.
+- Firebase 12 (Firestore `onSnapshot`, solo lectura pública).
+- Estado: React state + custom hooks.
+
+## Comandos
+
+```bash
+npm ci
+npm run lint
+npm run typecheck
+npm run build      # genera out/
+python3 -m http.server 4173 --directory out   # revisar el export estático
+```
+
+## Entornos
+
+| Rama | Proyecto Firebase | URL |
+|---|---|---|
+| `develop` | `yeyo-systems-web` | https://yeyo-systems-web.web.app |
+| `master` | `yeyo-systems` | https://yeyosystems.com |
+
+Detalle, variables y rollback: `docs/development-environment.md`.
+
+## Flujo de capas
 
 ```
-Presentation (React/Next.js)
-    ↓ usa
-Use Cases (domain/use-cases/)
-    ↓ depende de contratos
-Repositories (domain/repositories/)  ← Interfaces
-    ↑ implementado por
-Infrastructure (infrastructure/repositories/ + datasources/)
+Presentation (src/presentation + src/app)
+ ↓ usa
+Use Cases (src/domain/use-cases)
+ ↓ depende de contratos
+Repositories (src/domain/repositories) ← interfaces
+ ↑ implementado por
+Infrastructure (src/infrastructure)
 ```
 
-## Restricciones para Agentes
-
-1. **NO** importar paquetes de Next.js, Firebase o Supabase en `src/domain/`.
-2. **NO** hardcodear credenciales. Usar siempre `process.env.VARIABLE_NAME`.
-3. **NO** mezclar lógica de negocio en componentes React (`src/presentation/`).
-4. Los componentes de presentación **solo** llaman hooks; los hooks llaman use cases.
-5. Ver `.agents/rules/security-isolation.md` antes de cualquier cambio en `infrastructure/`.
-
-## Aplicaciones del Ecosistema Yeyo Systems
+## Aplicaciones del ecosistema
 
 | App | Estado | Descripción |
 |-----|--------|-------------|
-| Khatu | Production | App principal — datos en Supabase (AISLADO) |
-| Cortex | Beta | IA multiplataforma — Firebase/PostgreSQL (AISLADO) |
-| Saberio | Beta | Plataforma educativa (AISLADO) |
-| Khatu Services | Alpha | Servicios B2B |
-| Amateur Things | Development | Proyectos experimentales |
+| Khatu | Alpha | Ventas e inventario (versión telas) — datos en Supabase (AISLADO) |
+| Cortex | Alpha | Gestión educativa, Ley 070 — no es una app de IA (AISLADO) |
+| Saberio | Alpha | Venta de cursos y contenido educativo (AISLADO) |
+| Khatu Services | En diseño | Reservas y cobro de servicios (nombre provisional) |
+| Penitentiary | En desarrollo | Gestión de información penitenciaria (web) |
+| Amateur Things | Alpha | Contenido para adultos — no listado en el sitio |

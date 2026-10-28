@@ -1,0 +1,16 @@
+---
+description: Task lifecycle, Git/GitHub conventions, CHANGELOG and repository restrictions
+alwaysApply: true
+---
+
+# Workflow, Git, GitHub Issues y CHANGELOG
+
+- **Sin orden explícita:** no commit, no push, no PR, no merge, no despliegues ni cambios en Firebase, Environments, secretos, DNS o `master`.
+- **Ciclo:** issue → rama desde `develop` actualizado (`<type>/YS-<N>-kebab`) → plan numerado visible y aprobado → implementación por subtareas → Draft PR → Ready for review con CI verde y documentación aprobada → squash merge a pedido.
+- **PR:** título `[TYPE] YS-N - Título`; plantilla `.github/PULL_REQUEST_TEMPLATE.md`; `Closes #N` en texto plano (sin backticks). La rama por defecto es `master`: al fusionar en `develop` la issue se cierra a mano.
+- **Autorrevisión:** lint, typecheck y build en verde; comentarios nuevos en inglés y sin `TODO`/`FIXME`/ids de issue en `src/`; revisión de try/catch; entrada en `CHANGELOG.md`; pasos de verificación manual.
+- **Tests:** solo de alto valor (reglas de dominio con ramas, validación de payloads, mapeos no triviales).
+- **CHANGELOG:** `- [TYPE] YS-N - Descripción` bajo `## [Unreleased]`, agrupado por tipo y ordenado por número. Sin cambiar `package.json` salvo en el PR de release.
+- **Reglas:** cambios de proceso se reflejan a la vez en `.agents/rules/`, `.cursor/rules/`, `.cursorrules`, `.antigravityrules` y `AGENTS.md`.
+
+Detalle: @.agents/rules/workflow-git-github.md

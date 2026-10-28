@@ -55,29 +55,28 @@ export function Modal({
       aria-modal="true"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200" />
+      <div className="absolute inset-0 bg-smoke/70 animate-fade-in" />
 
       {/* Dialog box */}
       <div
         className={`
           relative w-full ${maxWidthStyles[maxWidth]}
-          bg-white dark:bg-slate-900
-          border border-slate-200 dark:border-slate-800
+          bg-surface border border-line
           rounded-2xl shadow-2xl overflow-hidden
-          animate-in fade-in zoom-in-95 duration-200
+          animate-scale-in
         `}
       >
         {/* Header */}
         {(title || subtitle) && (
-          <div className="flex items-start justify-between p-6 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-start justify-between p-6 border-b border-line">
             <div>
               {title && (
-                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50">
+                <h3 className="text-xl font-bold text-fg">
                   {title}
                 </h3>
               )}
               {subtitle && (
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-sm text-fg-muted mt-0.5">
                   {subtitle}
                 </p>
               )}
@@ -86,8 +85,7 @@ export function Modal({
               onClick={onClose}
               className="
                 p-2 rounded-xl -mr-2 -mt-2
-                text-slate-400 hover:text-slate-600 dark:hover:text-slate-200
-                hover:bg-slate-100 dark:hover:bg-slate-800
+                text-fg-muted hover:text-fg hover:bg-surface-muted
                 transition-colors duration-150
               "
               aria-label="Cerrar modal"

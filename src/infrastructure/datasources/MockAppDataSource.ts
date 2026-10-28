@@ -1,183 +1,160 @@
 // ============================================================
 // INFRASTRUCTURE LAYER — MockAppDataSource
-// DataSource de respaldo para desarrollo local.
-// Provee datos realistas de las 5 apps del ecosistema
-// cuando Firebase no está configurado.
+// Static catalog of the ecosystem products (source of truth
+// until the catalog moves to Firestore) and an empty metrics
+// stream for local development without Firebase.
 // ============================================================
 
 import type { AppProduct } from '@/domain/entities/AppProduct';
 import type { AppMetric } from '@/domain/entities/AppMetric';
 import type { UnsubscribeFn } from '@/domain/repositories/IAppRepository';
 
-const MOCK_APPS: AppProduct[] = [
+const CATALOG: AppProduct[] = [
   {
     id: 'khatu',
     name: 'Khatu',
-    tagline: 'Tu salud, simplificada.',
+    tagline: 'Ventas e inventario para negocios con varias sucursales.',
     description:
-      'Aplicación integral de bienestar y salud personal. Lleva el control de tus hábitos, medicamentos y métricas de salud con una experiencia fluida en Flutter.',
-    status: 'production',
-    category: 'health',
-    platforms: ['android', 'ios'],
-    iconName: 'khatu',
+      'Gestión de ventas, depósitos y tiendas. La versión actual está especializada en la venta de telas: producto por rollo entre sucursales y venta por rollo o por metro desde tienda o depósito.',
+    status: 'alpha',
+    category: 'sales',
     accentColor: '#4F46E5',
-    isAvailable: true,
-    launchDate: '2024-03-01',
-    links: {
-      playStore: 'https://play.google.com/store/apps/details?id=com.yeyosystems.khatu',
-      appStore: 'https://apps.apple.com/app/khatu',
-    },
+    highlights: [
+      'Punto de venta por rollo y por metro',
+      'Depósitos, tiendas y traspasos entre sucursales',
+      'Pérdidas y mermas',
+      'Cuentas por cobrar y por pagar',
+      'Proveedores, marcas y productos',
+      'Panel de reportes con gráficas',
+    ],
+    upcoming: [
+      'Productos por paquete y por unidad',
+      'Venta por peso y por volumen',
+      'Reportes en PDF',
+      'Venta de productos en general',
+    ],
+    stack: ['Flutter'],
+    platforms: ['android', 'ios', 'web'],
+    links: {},
+    isAvailable: false,
+    isListed: true,
   },
   {
     id: 'cortex',
     name: 'Cortex',
-    tagline: 'IA que trabaja contigo.',
+    tagline: 'Gestión educativa para colegios, institutos y universidades.',
     description:
-      'Asistente de inteligencia artificial multiplataforma potenciado por Gemini. Diseñado para productividad profesional y personal con integración nativa en Flutter.',
-    status: 'beta',
-    category: 'ai',
-    platforms: ['android', 'ios', 'web'],
-    iconName: 'cortex',
+      'Plataforma educativa que cubre la administración académica completa. En colegios está adaptada a la Ley 070 para la gestión docente, con seguimiento para padres y alumnos.',
+    status: 'alpha',
+    category: 'education',
     accentColor: '#7C3AED',
-    isAvailable: true,
-    launchDate: '2024-09-15',
-    links: {
-      playStore: 'https://play.google.com/store/apps/details?id=com.yeyosystems.cortex',
-      appStore: 'https://apps.apple.com/app/cortex',
-      web: 'https://cortex.yeyosystems.com',
-    },
+    highlights: [
+      'Registros de gestión modular y semanal (Ley 070)',
+      'Periodos bimestrales, trimestrales, semestrales y anuales',
+      'Boletines de notas y registro de asistencia',
+      'Acceso para padres de familia y alumnos',
+      'Cursos completos y evaluaciones en línea para maestros',
+    ],
+    stack: ['Flutter'],
+    platforms: ['android', 'ios', 'web'],
+    links: {},
+    isAvailable: false,
+    isListed: true,
   },
   {
     id: 'saberio',
     name: 'Saberio',
-    tagline: 'Aprende. Practica. Domina.',
+    tagline: 'Comparte conocimiento y véndelo en línea.',
     description:
-      'Plataforma educativa adaptativa con rutas de aprendizaje personalizadas. Combina gamificación y técnicas de estudio probadas en una experiencia Flutter premium.',
-    status: 'beta',
+      'Plataforma para publicar contenido educativo de todo tipo y venderlo como cursos en línea.',
+    status: 'alpha',
     category: 'education',
-    platforms: ['android', 'ios', 'web'],
-    iconName: 'saberio',
     accentColor: '#0891B2',
-    isAvailable: true,
-    launchDate: '2024-11-01',
-    links: {
-      playStore: 'https://play.google.com/store/apps/details?id=com.yeyosystems.saberio',
-      web: 'https://saberio.yeyosystems.com',
-    },
+    highlights: [
+      'Cursos en línea de cualquier tema',
+      'Venta de cursos y contenido',
+      'Evaluaciones para los alumnos',
+    ],
+    stack: ['Flutter'],
+    platforms: ['android', 'ios', 'web'],
+    links: {},
+    isAvailable: false,
+    isListed: true,
   },
   {
     id: 'khatu-services',
     name: 'Khatu Services',
-    tagline: 'Bienestar corporativo a escala.',
+    tagline: 'Reservas, atención y cobro para negocios de servicios.',
     description:
-      'Solución B2B de gestión de salud y bienestar para equipos de trabajo. Dashboard analítico, programas de wellness y reportes de empresa en tiempo real.',
-    status: 'alpha',
+      'Para negocios cuyo ingreso son los servicios y no los productos: consultorios médicos y odontológicos, psicólogos, plomeros, carpinteros y más.',
+    status: 'design',
     category: 'services',
-    platforms: ['web', 'android', 'ios'],
-    iconName: 'khatu-services',
     accentColor: '#059669',
+    highlights: [
+      'Reservas y agenda de atención',
+      'Servicios registrados como productos',
+      'Cobro por servicio',
+    ],
+    stack: ['Flutter'],
+    platforms: [],
+    links: {},
     isAvailable: false,
-    links: {
-      web: 'https://services.khatu.app',
-    },
+    isListed: true,
+  },
+  {
+    id: 'penitentiary',
+    name: 'Penitentiary',
+    tagline: 'Gestión de la información de centros penitenciarios.',
+    description:
+      'Sistema web para que el penal administre los registros de las personas privadas de libertad y la información que necesita su consejo.',
+    status: 'development',
+    category: 'institutional',
+    accentColor: '#475569',
+    highlights: [
+      'Estado del proceso, condena y fechas de ingreso y salida',
+      'Permisos y certificados',
+      'Registros de trabajo para reducción de condena',
+      'Consejo de internos, rubros, campeonatos e información general',
+    ],
+    stack: ['Web'],
+    platforms: ['web'],
+    links: {},
+    isAvailable: false,
+    isListed: true,
   },
   {
     id: 'amateur-things',
     name: 'Amateur Things',
-    tagline: 'Proyectos que cuestionan lo ordinario.',
+    tagline: 'Contenido para adultos y monetización para creadores.',
     description:
-      'Colección de experimentos, herramientas y proyectos de código abierto construidos por Yeyo Systems. Laboratorio de ideas y tecnologías emergentes.',
-    status: 'development',
-    category: 'experimental',
-    platforms: ['web'],
-    iconName: 'amateur-things',
+      'Plataforma para compartir contenido para adultos y generar ingresos con él.',
+    status: 'alpha',
+    category: 'content',
     accentColor: '#D97706',
-    isAvailable: true,
-    links: {
-      web: 'https://amateur-things.com',
-      github: 'https://github.com/Yeyo-Systems/amateur-things',
-    },
-  },
-];
-
-const MOCK_METRICS: AppMetric[] = [
-  {
-    appId: 'khatu',
-    activeUsers30d: 2847,
-    totalDownloads: 15420,
-    averageRating: 4.7,
-    totalRatings: 892,
-    latestVersion: '2.4.1',
-    lastUpdatedAt: new Date().toISOString(),
-  },
-  {
-    appId: 'cortex',
-    activeUsers30d: 1203,
-    totalDownloads: 4856,
-    averageRating: 4.5,
-    totalRatings: 287,
-    latestVersion: '0.9.3',
-    lastUpdatedAt: new Date().toISOString(),
-  },
-  {
-    appId: 'saberio',
-    activeUsers30d: 891,
-    totalDownloads: 3102,
-    averageRating: 4.6,
-    totalRatings: 156,
-    latestVersion: '0.7.0',
-    lastUpdatedAt: new Date().toISOString(),
-  },
-  {
-    appId: 'khatu-services',
-    activeUsers30d: 0,
-    totalDownloads: 0,
-    averageRating: 0,
-    totalRatings: 0,
-    latestVersion: '0.1.0',
-    lastUpdatedAt: new Date().toISOString(),
-  },
-  {
-    appId: 'amateur-things',
-    activeUsers30d: 445,
-    totalDownloads: 0,
-    averageRating: 0,
-    totalRatings: 0,
-    latestVersion: '1.0.0',
-    lastUpdatedAt: new Date().toISOString(),
+    highlights: [],
+    stack: ['Flutter'],
+    platforms: ['android', 'ios', 'web'],
+    links: {},
+    isAvailable: false,
+    isListed: false,
   },
 ];
 
 export class MockAppDataSource {
   async getApps(): Promise<AppProduct[]> {
-    // Simula latencia de red en desarrollo
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    return MOCK_APPS;
+    return CATALOG;
   }
 
   async getAppById(id: string): Promise<AppProduct | null> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    return MOCK_APPS.find((app) => app.id === id) ?? null;
+    return CATALOG.find((app) => app.id === id) ?? null;
   }
 
   streamPublicMetrics(callback: (metrics: AppMetric[]) => void): UnsubscribeFn {
-    // Emite datos inmediatamente
-    callback(MOCK_METRICS);
-
-    // Simula actualizaciones cada 30 segundos en desarrollo
-    const interval = setInterval(() => {
-      const updated = MOCK_METRICS.map((m) => ({
-        ...m,
-        activeUsers30d: m.activeUsers30d + Math.floor(Math.random() * 10 - 5),
-        lastUpdatedAt: new Date().toISOString(),
-      }));
-      callback(updated);
-    }, 30_000);
-
-    return () => clearInterval(interval);
+    callback([]);
+    return () => {};
   }
 
   async syncMetrics(metric: AppMetric): Promise<void> {
-    console.log('[MockDataSource] syncMetrics called with:', metric.appId);
+    console.info('[MockDataSource] syncMetrics called with:', metric.appId);
   }
 }

@@ -35,45 +35,39 @@
 
 ---
 
-## Clases Tailwind Estandarizadas
+## Tokens semánticos (obligatorios)
 
-### Fondo de Página
+Definidos en `src/app/globals.css` (Tailwind v4, `@theme inline`). Cambian solos
+con la clase `.dark` de next-themes, así que **no hace falta `dark:`** para los
+colores de la paleta.
+
+| Token | Clase | Claro | Oscuro | Uso |
+|-------|-------|-------|--------|-----|
+| `page` | `bg-page` | `#F8FAFC` | `#0B0F17` | Fondo de página |
+| `surface` | `bg-surface` | `#FFFFFF` | `#1E293B` | Tarjetas, modales |
+| `surface-muted` | `bg-surface-muted` | `#F1F5F9` | `#131B2B` | Secciones alternas, chips, skeletons |
+| `fg` | `text-fg` | `#0F172A` | `#F8FAFC` | Texto principal |
+| `fg-muted` | `text-fg-muted` | `#64748B` | `#94A3B8` | Texto secundario |
+| `line` | `border-line` | `#E2E8F0` | `#334155` | Bordes y divisores |
+| `brand` | `bg-brand` / `hover:bg-brand-hover` | `#4F46E5` / `#4338CA` | igual | CTAs (texto blanco) |
+| `brand-fg` | `text-brand-fg` | `#4F46E5` | `#A5B4FC` | Texto e iconos indigo sobre el fondo |
+| `live` | `bg-live` | `#059669` | `#10B981` | Indicadores "Live" y producción (puntos y bordes, no texto pequeño) |
+| `smoke` | `bg-smoke/70` | `#0B0F17` | igual | Overlays de modal |
+
+**Excepción de accesibilidad:** `brand-fg` usa `#A5B4FC` en oscuro porque
+`#4F46E5` sobre `#0B0F17` no alcanza contraste AA para texto.
+
 ```html
-<!-- ✅ Correcto -->
-<body class="bg-[#F8FAFC] dark:bg-[#0B0F17]">
-
-<!-- ✅ Alternativa con custom tokens (tailwind.config.ts) -->
-<body class="bg-smoke-light dark:bg-smoke-dark">
+<div class="bg-surface border border-line rounded-2xl shadow-sm">
+  <h3 class="text-fg font-bold">Título</h3>
+  <p class="text-fg-muted">Descripción</p>
+  <button class="bg-brand hover:bg-brand-hover text-white">Acción</button>
+</div>
 ```
 
-### Tarjetas / Cards
-```html
-<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm">
-```
-
-### Glassmorphism (para elementos destacados)
-```html
-<div class="backdrop-blur-md bg-white/10 dark:bg-slate-900/30 border border-white/20 dark:border-slate-700/50 rounded-2xl">
-```
-
-### Texto
-```html
-<h1 class="text-slate-900 dark:text-slate-50 font-bold">
-<p class="text-slate-600 dark:text-slate-400">
-```
-
-### Botón Primario (Acento Indigo)
-```html
-<button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-indigo-500/25">
-```
-
-### Badge "Live" (Acento Emerald)
-```html
-<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
-  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-  Live
-</span>
-```
+El variant `dark:` está declarado con `@custom-variant dark (&:where(.dark, .dark *))`
+para que siga al toggle y no a `prefers-color-scheme`. Úselo solo en casos que
+los tokens no cubren.
 
 ---
 
@@ -88,21 +82,23 @@
 
 ## Animaciones y Micro-interacciones
 
-- **Duración estándar**: `duration-200` para hovers, `duration-300` para transiciones de estado
-- **Easing**: `ease-in-out` por defecto
-- **Hover en cards**: `hover:scale-[1.02] hover:shadow-xl transition-all`
-- **Elementos "Live"**: `animate-pulse` solo para el dot indicador, no para texto
-- **Entrada de elementos**: Usar `animate-fade-in` con Tailwind animations plugin o CSS custom
+- **Duración estándar**: `duration-200`, con `transition-colors` o `transition-[box-shadow,border-color]`
+- **Cards de apps**: cada app tiene su color de acento (`accentColor`, HEX `#RRGGBB`, validado con `resolveAccentColor`). Se pasa como variable CSS `--app-accent` en `style` (única excepción a "sin estilos inline": el color es un dato de la app) y las clases lo usan en la franja superior, el ícono, el borde y el brillo al pasar el mouse. Hover: elevación `-translate-y-1` y sombra; sin `scale`
+- **Elementos "Live"**: `animate-pulse` solo en el punto indicador, no en texto
+- **Sin adornos**: sin resplandores difuminados, degradados en titulares ni glassmorphism decorativo. Excepciones: el brillo ambiental del hero (`bg-hero-glow`), un degradado radial con el indigo de marca cuya intensidad sale de los tokens `--glow-core` y `--glow-halo` de cada tema; el texto "transforman" con degradado `brand → brand-violet → brand-light` y su subrayado ondulado (`brand → brand-violet`); y el acento por app de las cards
+- **Modales**: `animate-fade-in` (overlay) y `animate-scale-in` (diálogo)
+- **`prefers-reduced-motion`** desactiva animaciones y transiciones (ya en `globals.css`)
 
 ---
 
 ## Convenciones de Componentes
 
-1. **SIEMPRE** usar dark mode con la clase `dark:` — no usar JS para cambiar colores
+1. **SIEMPRE** usar los tokens semánticos; `dark:` solo si un token no cubre el caso
 2. **SIEMPRE** usar el ThemeProvider de `src/presentation/theme/` para controlar el modo
-3. **NUNCA** usar colores inline style en componentes (excepto gradientes complejos)
+3. **NUNCA** usar colores en inline style ni hex sueltos en clases (excepción: `global-error.tsx`, que se renderiza sin `globals.css`)
 4. **NUNCA** usar colores fuera de la paleta corporativa sin aprobación
 5. Los componentes deben ser **mobile-first**: estilos base para móvil, breakpoints para desktop
+6. **NUNCA** usar emojis como iconos; usar SVG con `aria-hidden="true"` o texto
 
 ---
 
@@ -111,4 +107,4 @@
 - **Grid de Ecosystem**: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` con `gap-6`
 - **Padding de Sección**: `px-4 sm:px-6 lg:px-8 py-16 lg:py-24`
 - **Max Width de Contenedor**: `max-w-7xl mx-auto`
-- **Border Radius estándar**: Cards `rounded-xl`, Botones `rounded-lg`, Badges `rounded-full`
+- **Border Radius estándar**: Cards `rounded-2xl`, Botones `rounded-xl`, Badges `rounded-full`

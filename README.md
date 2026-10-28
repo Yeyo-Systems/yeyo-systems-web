@@ -1,7 +1,10 @@
 # Yeyo Systems — Web Platform
 
 <p align="center">
-  <img src="public/logo.svg" alt="Yeyo Systems Logo" width="560" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/brand/logo-dark.png" />
+    <img src="public/brand/logo-light.png" alt="Yeyo Systems — Multi-Platform Ecosystem" width="520" />
+  </picture>
 </p>
 
 <p align="center">
@@ -33,11 +36,12 @@ Infrastructure (infrastructure/repositories/ + datasources/)
 
 ### Reglas Invariantes
 - **Dominio Puro (`src/domain/`)**: Cero dependencias de Next.js, React o Firebase.
-- **Aislamiento de Seguridad**: Las apps de producción (Khatu en Supabase, Cortex en Firebase/PostgreSQL) envían métricas anónimas hacia `/api/metrics/sync` mediante solicitudes de servidor a servidor (S2S) autenticadas con `Bearer {SYNC_API_SECRET}`. La web sólo lee la colección aislada `public_app_metrics`.
+- **Aislamiento de Seguridad**: La web sólo lee la colección aislada `public_app_metrics`. El diseño de métricas S2S autenticadas con `Bearer {SYNC_API_SECRET}` requiere un runtime de servidor aprobado; el export estático actual no acepta solicitudes `POST` en `/api/metrics/sync`.
 - **Diseño & Paleta Corporativa**:
   - **Dark Mode**: Fondo `#0B0F17` (Gris humo profundo), superficie `#1E293B`, texto `#F8FAFC`.
   - **Light Mode**: Fondo `#F8FAFC`, superficie `#FFFFFF`, texto `#0F172A`.
-  - **Acentos**: Indigo Corporativo `#4F46E5`, Verde Live `#10B981`, Resplandor Neón Cyberpunk.
+  - **Acentos**: Indigo Corporativo `#4F46E5`, Verde Live `#10B981`.
+  - Tokens semánticos (`bg-page`, `bg-surface`, `text-fg`, `border-line`, `bg-brand`…) en `src/app/globals.css`; ver `.agents/rules/styling-theme.md`.
 
 ---
 
@@ -45,18 +49,21 @@ Infrastructure (infrastructure/repositories/ + datasources/)
 
 | App | Categoría | Estado | Tecnologías | Descripción |
 |---|---|---|---|---|
-| **Khatu** | Salud & Bienestar | `production` | Flutter, Android, iOS | Aplicación integral de bienestar, hábitos y salud personal. |
-| **Cortex** | Asistente IA | `beta` | Flutter, Multiplataforma | Asistente de inteligencia artificial y productividad. |
-| **Saberio** | Educación | `beta` | Flutter, Web, Móvil | Plataforma educativa adaptativa con rutas gamificadas. |
-| **Khatu Services** | Enterprise B2B | `alpha` | Flutter Web & Mobile | Solución corporativa para gestión de salud en equipos. |
-| **Amateur Things** | Laboratorio Abierto | `development` | Flutter & Open Source | Proyectos experimentales y herramientas de código abierto. |
+| **Khatu** | Ventas e inventario | `alpha` | Flutter (Android, iOS, Web) | Ventas, depósitos y tiendas; versión especializada en telas (rollo y metro), mermas, cuentas por cobrar/pagar y reportes. |
+| **Cortex** | Educación | `alpha` | Flutter (Android, iOS, Web) | Gestión educativa para colegios (Ley 070), institutos y universidades: boletines, asistencia, padres y alumnos. |
+| **Saberio** | Educación | `alpha` | Flutter | Venta de cursos y contenido educativo en línea. |
+| **Khatu Services** | Servicios | `design` | Flutter | Reservas, atención y cobro para negocios de servicios. Nombre provisional. |
+| **Penitentiary** | Institucional | `development` | Web | Registros de personas privadas de libertad y del consejo de internos. |
+| **Amateur Things** | Contenido | `alpha` | Flutter | Monetización de contenido para adultos. No se muestra en el sitio (`isListed: false`). |
+
+El catálogo vive en `src/infrastructure/datasources/MockAppDataSource.ts`; las métricas públicas solo se muestran para apps en producción.
 
 ---
 
 ## 🚀 Inicio Rápido
 
 ### Requisitos Previos
-- Node.js 20+
+- Node.js 22+
 - npm o pnpm
 
 ### Instalación
@@ -72,8 +79,11 @@ npm install
 ### Variables de Entorno
 Copia el archivo de ejemplo y configura tus variables:
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
+
+Usa únicamente el proyecto Firebase de desarrollo (`yeyo-systems-web`) o deja
+los valores vacíos para trabajar con datos mock.
 
 ### Ejecutar Servidor de Desarrollo
 ```bash
@@ -84,8 +94,24 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 ### Compilar y Validar
 ```bash
 npm run lint
-npm run build
+npm run typecheck
+npm run build   # export estático en out/
 ```
+
+---
+
+## 🚢 Entornos y Despliegue
+
+| Rama | Proyecto Firebase | URL |
+|---|---|---|
+| `develop` | `yeyo-systems-web` | https://yeyo-systems-web.web.app |
+| `master` | `yeyo-systems` | https://yeyosystems.com |
+
+Los PR ejecutan CI (lint, typecheck, build). Al fusionar en `develop` se publica
+automáticamente en el entorno de desarrollo; al fusionar `develop` en `master`
+se publica en producción tras la aprobación del environment `production`.
+Detalles, variables requeridas y rollback en
+[`docs/development-environment.md`](docs/development-environment.md).
 
 ---
 

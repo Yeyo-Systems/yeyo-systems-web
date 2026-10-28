@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "yeyo-systems"
+    "develop": "yeyo-systems-web",
+    "production": "yeyo-systems"
   }
 }

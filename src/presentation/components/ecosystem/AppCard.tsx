@@ -1,8 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { AppProduct } from '@/domain/entities/AppProduct';
-import { getStatusLabel, isActiveStatus } from '@/domain/entities/AppProduct';
+import type { AppProduct, Platform } from '@/domain/entities/AppProduct';
+import {
+  getCategoryLabel,
+  getStatusLabel,
+  isActiveStatus,
+  resolveAccentColor,
+  showsPublicMetrics,
+} from '@/domain/entities/AppProduct';
 import { formatDownloads, formatRating } from '@/domain/entities/AppMetric';
 import { PlatformModal } from './PlatformModal';
 import { Badge, Button } from '@/presentation/components/ui';
@@ -11,113 +17,134 @@ interface AppCardProps {
   app: AppProduct;
 }
 
-const categoryIcons: Record<AppProduct['category'], string> = {
-  health: '💚',
-  ai: '🧠',
-  education: '📚',
-  productivity: '⚡',
-  services: '🏢',
-  experimental: '🔬',
+const PLATFORM_LABELS: Record<Platform, string> = {
+  android: 'Android',
+  ios: 'iOS',
+  web: 'Web',
+  macos: 'macOS',
+  windows: 'Windows',
+  linux: 'Linux',
 };
 
 export function AppCard({ app }: AppCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isActive = isActiveStatus(app.status);
+  const metrics = showsPublicMetrics(app) ? app.metrics : undefined;
+  const chips = Array.from(
+    new Set([...app.stack, ...app.platforms.map((platform) => PLATFORM_LABELS[platform])])
+  );
+  const accentStyle = { '--app-accent': resolveAccentColor(app.accentColor) } as React.CSSProperties;
 
   return (
     <>
       <article
+        style={accentStyle}
         className="
           group relative flex flex-col
-          bg-white dark:bg-[#1E293B]
-          border border-slate-200 dark:border-slate-800
+          bg-surface border border-line
           rounded-2xl overflow-hidden
-          shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 dark:hover:shadow-black/50
+          shadow-sm hover:shadow-xl hover:shadow-brand/10 dark:hover:shadow-smoke/50
           transition-all duration-300 ease-out
-          hover:-translate-y-1 hover:border-indigo-500/30
-          backdrop-blur-sm
+          hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--app-accent)_45%,transparent)]
         "
       >
-        {/* Accent bar top */}
-        <div
-          className="h-1 w-full opacity-80"
-          style={{ backgroundColor: app.accentColor }}
-        />
+        <div aria-hidden="true" className="h-1 w-full opacity-80 bg-[var(--app-accent)]" />
 
-        {/* Card Header */}
         <div className="p-6 flex items-start gap-4">
-          {/* App Icon Placeholder */}
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 shadow-lg"
-            style={{
-              background: `linear-gradient(135deg, ${app.accentColor}20, ${app.accentColor}40)`,
-              border: `1px solid ${app.accentColor}30`,
-            }}
+            aria-hidden="true"
+            className="
+              w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg
+              text-2xl font-black text-[var(--app-accent)] dark:text-fg
+              bg-linear-135 from-[color-mix(in_srgb,var(--app-accent)_13%,transparent)] to-[color-mix(in_srgb,var(--app-accent)_25%,transparent)]
+              border border-[color-mix(in_srgb,var(--app-accent)_19%,transparent)]
+            "
           >
-            {categoryIcons[app.category]}
+            {app.name.charAt(0)}
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 truncate">
+              <h3 className="text-lg font-bold text-fg">
                 {app.name}
               </h3>
-              {/* Status Badge */}
-              <Badge variant={app.status} pulse={isActive}>
+              <Badge variant={app.status} dot={isActive}>
                 {getStatusLabel(app.status)}
               </Badge>
             </div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+            <p className="text-sm text-fg-muted mt-0.5 font-medium">
               {app.tagline}
             </p>
           </div>
         </div>
 
-        {/* Description */}
-        <div className="px-6 pb-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
+        <div className="px-6 pb-4 space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
+            {getCategoryLabel(app.category)}
+          </p>
+          <p className="text-sm text-fg-muted leading-relaxed">
             {app.description}
           </p>
         </div>
 
-        {/* Metrics Row */}
-        {app.metrics && (app.metrics.totalDownloads > 0 || app.metrics.averageRating > 0) && (
-          <div className="px-6 py-3 border-t border-slate-100 dark:border-slate-800/60 flex gap-4">
-            {app.metrics.totalDownloads > 0 && (
-              <div className="flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        {app.highlights.length > 0 && (
+          <ul className="px-6 pb-4 space-y-1.5">
+            {app.highlights.map((highlight) => (
+              <li key={highlight} className="flex items-start gap-2 text-sm text-fg">
+                <svg aria-hidden="true" className="w-4 h-4 mt-0.5 flex-shrink-0 text-[var(--app-accent)] dark:text-fg-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  {formatDownloads(app.metrics.totalDownloads)}
+                {highlight}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {app.upcoming && app.upcoming.length > 0 && (
+          <div className="mx-6 mb-4 p-3 rounded-xl bg-surface-muted border border-line">
+            <p className="text-xs font-semibold uppercase tracking-wider text-fg-muted mb-1.5">
+              Próximas versiones
+            </p>
+            <p className="text-sm text-fg-muted leading-relaxed">
+              {app.upcoming.join(' · ')}
+            </p>
+          </div>
+        )}
+
+        {metrics && (metrics.totalDownloads > 0 || metrics.averageRating > 0) && (
+          <div className="px-6 py-3 border-t border-line flex gap-4">
+            {metrics.totalDownloads > 0 && (
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-semibold font-mono text-fg">
+                  {formatDownloads(metrics.totalDownloads)}
                 </span>
-                <span className="text-xs text-slate-400">descargas</span>
+                <span className="text-xs text-fg-muted">descargas</span>
               </div>
             )}
-            {app.metrics.averageRating > 0 && (
+            {metrics.averageRating > 0 && (
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-semibold text-amber-500">
-                  {formatRating(app.metrics.averageRating)}
+                <span className="text-xs font-semibold font-mono text-fg">
+                  {formatRating(metrics.averageRating)}
                 </span>
-                <span className="text-xs text-slate-400">({app.metrics.totalRatings})</span>
+                <span className="text-xs text-fg-muted">({metrics.totalRatings})</span>
               </div>
             )}
           </div>
         )}
 
-        {/* Platforms */}
-        <div className="px-6 pb-4 flex flex-wrap gap-1.5 mt-auto">
-          {app.platforms.map((platform) => (
-            <span
-              key={platform}
-              className="px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/50 dark:border-slate-700/50"
-            >
-              {platform.charAt(0).toUpperCase() + platform.slice(1)}
-            </span>
-          ))}
-        </div>
+        {chips.length > 0 && (
+          <div className="px-6 pb-4 flex flex-wrap gap-1.5 mt-auto">
+            {chips.map((chip) => (
+              <span
+                key={chip}
+                className="px-2 py-0.5 rounded-md text-xs font-medium bg-surface-muted text-fg-muted border border-line"
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
+        )}
 
-        {/* CTA Button */}
         <div className="px-6 pb-6">
           {app.isAvailable ? (
             <Button
@@ -126,7 +153,7 @@ export function AppCard({ app }: AppCardProps) {
               className="w-full"
               onClick={() => setIsModalOpen(true)}
               rightIcon={
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               }
@@ -134,22 +161,18 @@ export function AppCard({ app }: AppCardProps) {
               Ver plataformas
             </Button>
           ) : (
-            <div className="w-full py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 text-center">
-              <span className="text-sm text-slate-400 font-medium">Próximamente</span>
+            <div className="w-full py-2.5 px-4 rounded-xl bg-surface-muted text-center">
+              <span className="text-sm text-fg-muted font-medium">Próximamente</span>
             </div>
           )}
         </div>
 
-        {/* Hover glow effect */}
         <div
-          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle at 50% 0%, ${app.accentColor}12 0%, transparent 70%)`,
-          }}
+          aria-hidden="true"
+          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,color-mix(in_srgb,var(--app-accent)_7%,transparent)_0%,transparent_70%)]"
         />
       </article>
 
-      {/* Platform Modal */}
       {isModalOpen && (
         <PlatformModal
           app={app}
