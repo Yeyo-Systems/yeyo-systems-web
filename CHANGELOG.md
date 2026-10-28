@@ -13,6 +13,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). P
 ### FIX
 
 - [FIX] YS-9 - CI/CD: Firebase Hosting estático para develop y producción
+- [FIX] YS-9 - Despliegue de producción sin claves (Workload Identity Federation)
 
 ### DOCS
 
