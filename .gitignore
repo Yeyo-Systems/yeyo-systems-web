@@ -26,7 +26,8 @@
 
 # IDEs
 .idea/
-.cursor/
+.cursor/*
+!.cursor/rules/
 
 # debug
 npm-debug.log*

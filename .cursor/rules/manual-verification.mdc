@@ -1,0 +1,10 @@
+---
+description: After implementation, tell the user how to verify the change manually
+alwaysApply: true
+---
+
+# Verificación manual
+
+Al entregar una implementación, incluir **Cómo probarlo**: dónde (export estático local servido desde `out/` o `https://yeyo-systems-web.web.app`), pasos numerados, resultado esperado, casos negativos opcionales y requisitos previos. Docs o reglas sin superficie ejecutable: **N/A** con el motivo.
+
+Detalle: @.agents/rules/manual-verification.md
