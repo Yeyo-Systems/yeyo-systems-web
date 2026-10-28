@@ -55,7 +55,15 @@ Cree dos environments: `develop` y `production`.
 | Variable | `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | 〃 | 〃 |
 | Variable | `NEXT_PUBLIC_FIREBASE_APP_ID` | 〃 | 〃 |
 | Variable | `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` | 〃 | 〃 |
-| Secret | `FIREBASE_SERVICE_ACCOUNT` | JSON de la cuenta de servicio de `yeyo-systems-web` | JSON de la cuenta de servicio de `yeyo-systems` |
+| Secret | `FIREBASE_SERVICE_ACCOUNT` | JSON de la cuenta de servicio de `yeyo-systems-web` | — (no aplica) |
+| Variable | `GCP_WORKLOAD_IDENTITY_PROVIDER` | — | `projects/867937526837/locations/global/workloadIdentityPools/github/providers/yeyo-systems-web` |
+| Variable | `GCP_SERVICE_ACCOUNT` | — | `github-hosting-deploy@yeyo-systems.iam.gserviceaccount.com` |
+
+`deploy-hosting.yml` usa Workload Identity Federation cuando el environment
+define `GCP_WORKLOAD_IDENTITY_PROVIDER` y `GCP_SERVICE_ACCOUNT`; si no, usa el
+secreto `FIREBASE_SERVICE_ACCOUNT`. Producción usa la federación porque la
+organización `yeyosystems.com` prohíbe crear claves JSON
+(`iam.managed.disableServiceAccountKeyCreation`).
 
 La configuración web de Firebase es pública (se envía al navegador), pero
 igualmente vive en variables del environment y no en el código. Las cuentas de
@@ -77,9 +85,14 @@ Con la cuenta propietaria del proyecto:
 2. Roles: **Firebase Hosting Admin**, **API Keys Viewer** y **Service Usage
    Consumer** (sin este último, el CLI falla con `403 Permission denied to get
    service [firebasehosting.googleapis.com]`).
-3. *Keys → Add key → JSON* y pegue el contenido en el secreto
-   `FIREBASE_SERVICE_ACCOUNT` del environment correspondiente. Elimine el
-   archivo local después.
+3. `develop`: *Keys → Add key → JSON* y pegue el contenido en el secreto
+   `FIREBASE_SERVICE_ACCOUNT` del environment. Elimine el archivo local después.
+4. `production` (sin claves): pool de Workload Identity `github` con el
+   proveedor OIDC `yeyo-systems-web` (emisor
+   `https://token.actions.githubusercontent.com`). Condición del proveedor:
+   `repository_id` de este repo, `environment == 'production'` y
+   `ref == 'refs/heads/master'`. La cuenta de servicio otorga
+   `roles/iam.workloadIdentityUser` al `principalSet` de ese `repository_id`.
 
 ## Comprobaciones locales
 
