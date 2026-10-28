@@ -1,0 +1,88 @@
+name: Deploy Firebase Hosting
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: GitHub environment holding the Firebase variables and secret
+        type: string
+        required: true
+      expected_project:
+        description: Firebase project the environment is allowed to target
+        type: string
+        required: true
+      url:
+        description: Public URL of the deployed site
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  deploy:
+    name: Build & Deploy (${{ inputs.environment }})
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ inputs.url }}
+    env:
+      FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${{ vars.NEXT_PUBLIC_FIREBASE_API_KEY }}
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ vars.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ vars.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+      NEXT_PUBLIC_FIREBASE_APP_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_APP_ID }}
+      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
+    steps:
+      # Blocks an environment whose variables point to another Firebase project.
+      - name: Verify environment isolation
+        env:
+          EXPECTED_PROJECT: ${{ inputs.expected_project }}
+          HAS_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
+        run: |
+          fail=0
+          if [[ "$FIREBASE_PROJECT_ID" != "$EXPECTED_PROJECT" ]]; then
+            echo "::error::vars.FIREBASE_PROJECT_ID must be '$EXPECTED_PROJECT' (got '${FIREBASE_PROJECT_ID:-<empty>}')."
+            fail=1
+          fi
+          if [[ "$NEXT_PUBLIC_FIREBASE_PROJECT_ID" != "$EXPECTED_PROJECT" ]]; then
+            echo "::error::vars.NEXT_PUBLIC_FIREBASE_PROJECT_ID must be '$EXPECTED_PROJECT'."
+            fail=1
+          fi
+          if [[ "$HAS_SERVICE_ACCOUNT" != "true" ]]; then
+            echo "::error::Missing secret FIREBASE_SERVICE_ACCOUNT in environment '${{ inputs.environment }}'."
+            fail=1
+          fi
+          exit $fail
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint & Typecheck
+        run: |
+          npm run lint
+          npm run typecheck
+
+      - name: Build static export
+        run: |
+          npm run build
+          test -f out/index.html
+
+      - name: Deploy to Firebase Hosting (live)
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ inputs.expected_project }}
+          channelId: live

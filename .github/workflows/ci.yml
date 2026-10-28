@@ -1,0 +1,58 @@
+name: CI Yeyo Systems Web
+
+on:
+  pull_request:
+    branches: [ develop, master ]
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # PR FLOW: lint, typecheck and static build before merging.
+  test_pr:
+    name: Lint, Typecheck & Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Builds without Firebase variables; the site falls back to mock data.
+      - name: Build static export
+        run: |
+          npm run build
+          test -f out/index.html
+
+  # Production only receives develop (release) or hotfix/* branches.
+  release_source:
+    name: Validate Release Source
+    if: github.base_ref == 'master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check head branch
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [[ "$HEAD_REF" != "develop" && "$HEAD_REF" != hotfix/* ]]; then
+            echo "::error::PRs to master must come from develop or hotfix/*, got '$HEAD_REF'."
+            exit 1
+          fi

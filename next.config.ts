@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // SSR mode — deployed on Firebase App Hosting (develop) and Firebase Hosting (production).
-  // Do NOT re-add `output: 'export'`; it disables API routes and server-side rendering.
+  // Static export served by Firebase Hosting (develop: yeyo-systems-web,
+  // production: yeyo-systems). Server features (POST route handlers, SSR,
+  // Server Actions) are unavailable until a server runtime is approved (#2).
+  output: "export",
+  images: {
+    unoptimized: true,
+  },
   turbopack: {
     rules: {
       "*.css": {

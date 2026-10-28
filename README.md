@@ -56,7 +56,7 @@ Infrastructure (infrastructure/repositories/ + datasources/)
 ## 🚀 Inicio Rápido
 
 ### Requisitos Previos
-- Node.js 20+
+- Node.js 22+
 - npm o pnpm
 
 ### Instalación
@@ -75,9 +75,8 @@ Copia el archivo de ejemplo y configura tus variables:
 cp .env.example .env.local
 ```
 
-Usa únicamente un proyecto Firebase aislado para desarrollo. Consulta
-[`docs/development-environment.md`](docs/development-environment.md) antes de
-configurar GitHub Actions, Firebase Hosting o App Hosting.
+Usa únicamente el proyecto Firebase de desarrollo (`yeyo-systems-web`) o deja
+los valores vacíos para trabajar con datos mock.
 
 ### Ejecutar Servidor de Desarrollo
 ```bash
@@ -88,8 +87,24 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 ### Compilar y Validar
 ```bash
 npm run lint
-npm run build
+npm run typecheck
+npm run build   # export estático en out/
 ```
+
+---
+
+## 🚢 Entornos y Despliegue
+
+| Rama | Proyecto Firebase | URL |
+|---|---|---|
+| `develop` | `yeyo-systems-web` | https://yeyo-systems-web.web.app |
+| `master` | `yeyo-systems` | https://yeyosystems.com |
+
+Los PR ejecutan CI (lint, typecheck, build). Al fusionar en `develop` se publica
+automáticamente en el entorno de desarrollo; al fusionar `develop` en `master`
+se publica en producción tras la aprobación del environment `production`.
+Detalles, variables requeridas y rollback en
+[`docs/development-environment.md`](docs/development-environment.md).
 
 ---
 

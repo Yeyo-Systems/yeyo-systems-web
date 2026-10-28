@@ -1,6 +1,6 @@
 {
   "projects": {
-    "develop": "yeyo-systems-7d609"
+    "develop": "yeyo-systems-web",
+    "production": "yeyo-systems"
   }
 }
-
