@@ -110,13 +110,21 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
               {/* Logo / Brand */}
               <a href="#" className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl overflow-hidden bg-smoke flex items-center justify-center">
+                <div className="w-10 h-10 flex items-center justify-center">
+                  <Image
+                    src="/brand/yeyo-mark-light.webp"
+                    alt=""
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-contain dark:hidden"
+                    priority
+                  />
                   <Image
                     src="/brand/yeyo-mark.webp"
                     alt=""
-                    width={36}
-                    height={36}
-                    className="w-full h-full object-contain"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-contain hidden dark:block"
                     priority
                   />
                 </div>
@@ -169,13 +177,20 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg overflow-hidden bg-smoke flex items-center justify-center">
+                  <div className="w-9 h-9 flex items-center justify-center">
+                    <Image
+                      src="/brand/yeyo-mark-light.webp"
+                      alt=""
+                      width={36}
+                      height={36}
+                      className="w-full h-full object-contain dark:hidden"
+                    />
                     <Image
                       src="/brand/yeyo-mark.webp"
                       alt=""
-                      width={32}
-                      height={32}
-                      className="w-full h-full object-contain"
+                      width={36}
+                      height={36}
+                      className="w-full h-full object-contain hidden dark:block"
                     />
                   </div>
                   <div className="flex flex-col">

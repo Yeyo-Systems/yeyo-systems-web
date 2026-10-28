@@ -53,7 +53,9 @@ export default function HomePage() {
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-fg tracking-tight leading-[1.08] mb-6">
               Construimos apps que{' '}
               <span className="relative inline-block">
-                <span className="text-brand-fg">transforman</span>
+                <span className="bg-linear-to-r from-brand via-brand-violet to-brand-light bg-clip-text text-transparent">
+                  transforman
+                </span>
                 <svg
                   aria-hidden="true"
                   className="absolute -bottom-2 left-0 w-full"
@@ -64,7 +66,7 @@ export default function HomePage() {
                   <defs>
                     <linearGradient id="hero-underline" x1="0" x2="1" y1="0" y2="0">
                       <stop offset="0%" stopColor="var(--brand)" />
-                      <stop offset="100%" stopColor="var(--glow-accent)" />
+                      <stop offset="100%" stopColor="var(--color-brand-violet)" />
                     </linearGradient>
                   </defs>
                   <path
@@ -164,7 +166,7 @@ export default function HomePage() {
             <div>
               <h2 className="text-4xl font-bold text-fg mb-6">
                 Tecnología con{' '}
-                <span className="text-brand-fg">propósito</span>
+                <span className="text-brand-emphasis">propósito</span>
               </h2>
               <div className="space-y-4 text-lg text-fg-muted leading-relaxed">
                 <p>

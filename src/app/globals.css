@@ -24,7 +24,7 @@
   --scrollbar: #CBD5E1;
   --glow-core: color-mix(in srgb, var(--brand) 16%, transparent);
   --glow-halo: color-mix(in srgb, var(--brand) 7%, transparent);
-  --glow-accent: #818CF8;
+  --brand-emphasis: #4F46E5;
 }
 
 .dark {
@@ -41,7 +41,7 @@
   --scrollbar: #334155;
   --glow-core: color-mix(in srgb, var(--brand) 32%, transparent);
   --glow-halo: color-mix(in srgb, var(--brand-fg) 9%, transparent);
-  --glow-accent: #A5B4FC;
+  --brand-emphasis: #818CF8;
 }
 
 @theme inline {
@@ -59,6 +59,11 @@
   /* Indigo text/icons readable on both themes (AA on page and surface). */
   --color-brand-fg: var(--brand-fg);
   --color-live: var(--live);
+  /* Highlighted headline words; indigo-400 on dark like the original design. */
+  --color-brand-emphasis: var(--brand-emphasis);
+  /* Theme-independent gradient stops for the hero headline. */
+  --color-brand-violet: #7C3AED;
+  --color-brand-light: #6366F1;
   /* Fixed (theme-independent) smoke, used for overlays. */
   --color-smoke: #0B0F17;
 
