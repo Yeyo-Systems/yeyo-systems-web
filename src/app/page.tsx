@@ -28,8 +28,8 @@ export default function HomePage() {
             <div className="flex justify-center mb-8">
               <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden p-1 bg-smoke border border-line shadow-lg flex items-center justify-center">
                 <Image
-                  src="/icon.svg"
-                  alt="Yeyo Systems"
+                  src="/brand/yeyo-mark.webp"
+                  alt="Logo de Yeyo Systems"
                   width={112}
                   height={112}
                   className="w-full h-full object-contain"

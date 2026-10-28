@@ -49,11 +49,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: COMPANY_NAME, url: SITE_URL }],
   creator: COMPANY_NAME,
-  icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
-  },
   openGraph: {
     type: 'website',
     locale: 'es_BO',
@@ -61,13 +56,13 @@ export const metadata: Metadata = {
     siteName: COMPANY_NAME,
     title: 'Yeyo Systems — Software Multiplataforma',
     description:
-      'Ecosistema de aplicaciones multiplataforma construidas en Flutter.',
+      'Aplicaciones multiplataforma para ventas e inventario, gestión educativa, servicios e instituciones.',
     images: [
       {
-        url: '/logo.svg',
-        width: 680,
-        height: 160,
-        alt: 'Yeyo Systems Logo',
+        url: '/brand/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Yeyo Systems — Multi-Platform Ecosystem',
       },
     ],
   },
@@ -75,7 +70,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: COMPANY_NAME,
     description: 'Software multiplataforma con Flutter y Next.js',
-    images: ['/logo.svg'],
+    images: ['/brand/og-image.png'],
   },
   robots: {
     index: true,
@@ -115,10 +110,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
               {/* Logo / Brand */}
               <a href="#" className="flex items-center gap-3">
-                <div className="relative w-9 h-9 rounded-xl overflow-hidden">
+                <div className="w-9 h-9 rounded-xl overflow-hidden bg-smoke flex items-center justify-center">
                   <Image
-                    src="/icon.svg"
-                    alt="Yeyo Systems Icon"
+                    src="/brand/yeyo-mark.webp"
+                    alt=""
                     width={36}
                     height={36}
                     className="w-full h-full object-contain"
@@ -130,7 +125,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     Yeyo Systems
                   </span>
                   <span className="text-[10px] uppercase font-mono tracking-wider text-fg-muted font-semibold">
-                    Software Ecosystem
+                    Multi-Platform Ecosystem
                   </span>
                 </div>
               </a>
@@ -174,12 +169,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg overflow-hidden shadow-sm">
+                  <div className="w-8 h-8 rounded-lg overflow-hidden bg-smoke flex items-center justify-center">
                     <Image
-                      src="/icon.svg"
-                      alt="Yeyo Systems"
-                      width={28}
-                      height={28}
+                      src="/brand/yeyo-mark.webp"
+                      alt=""
+                      width={32}
+                      height={32}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -188,7 +183,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                       Yeyo Systems
                     </span>
                     <span className="text-xs text-fg-muted">
-                      Multi-Platform Software Engineering
+                      Multi-Platform Ecosystem
                     </span>
                   </div>
                 </div>

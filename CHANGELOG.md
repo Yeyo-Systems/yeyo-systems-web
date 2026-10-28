@@ -4,6 +4,12 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). P
 
 ## [Unreleased]
 
+### FEATURE
+
+- [FEATURE] YS-3 - Sistema de diseño: tokens semánticos, fix de tema y franja de tecnologías
+- [FEATURE] YS-11 - Catálogo real de apps agrupado por etapa
+- [FEATURE] YS-20 - Nuevo logo de Yeyo Systems: favicon, íconos de app, cabecera y Open Graph
+
 ### FIX
 
 - [FIX] YS-9 - CI/CD: Firebase Hosting estático para develop y producción

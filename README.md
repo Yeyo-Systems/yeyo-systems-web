@@ -1,7 +1,7 @@
 # Yeyo Systems — Web Platform
 
 <p align="center">
-  <img src="public/logo.svg" alt="Yeyo Systems Logo" width="560" />
+  <img src="public/brand/og-image.png" alt="Yeyo Systems — Multi-Platform Ecosystem" width="600" />
 </p>
 
 <p align="center">
