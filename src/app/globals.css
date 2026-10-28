@@ -1,76 +1,85 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Yeyo Systems — Design System
-   Paleta corporativa + Variables CSS
-   Compatible con Tailwind CSS v4
+   Yeyo Systems — Design System (Tailwind CSS v4)
+   Semantic tokens switch with the `.dark` class set by next-themes.
+   Use: bg-page, bg-surface, bg-surface-muted, text-fg, text-fg-muted,
+        border-line, bg-brand, hover:bg-brand-hover, text-live, bg-live.
    ============================================================ */
 
-/* ============================================================
-   Custom theme tokens for Tailwind v4
-   ============================================================ */
-@theme {
-  /* Tipografía */
-  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
-  --font-mono: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+/* `dark:` must follow the theme toggle, not prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-  /* Colores corporativos */
-  --color-smoke-light: #F8FAFC;
-  --color-smoke-dark: #0B0F17;
-  --color-slate-surface: #1E293B;
-
-  --color-indigo-accent: #4F46E5;
-  --color-indigo-hover: #4338CA;
-  --color-emerald-active: #10B981;
-  --color-emerald-hover: #059669;
-
-  /* Animaciones */
-  --animate-fade-in: fade-in 0.4s ease-out;
-  --animate-slide-up: slide-up 0.5s ease-out;
-  --animate-scale-in: scale-in 0.3s ease-out;
-}
-
-/* ============================================================
-   Variables CSS globales
-   ============================================================ */
 :root {
-  /* Light Mode */
-  --bg-page: #F8FAFC;
-  --bg-card: #FFFFFF;
-  --text-primary: #0F172A;
-  --text-secondary: #64748B;
-  --border-color: #E2E8F0;
-  --shadow-color: rgba(15, 23, 42, 0.08);
+  --page: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-muted: #F1F5F9;
+  --fg: #0F172A;
+  --fg-muted: #64748B;
+  --line: #E2E8F0;
+  --brand: #4F46E5;
+  --brand-hover: #4338CA;
+  --brand-fg: #4F46E5;
+  --live: #059669;
+  --scrollbar: #CBD5E1;
 }
 
 .dark {
-  /* Dark Mode */
-  --bg-page: #0B0F17;
-  --bg-card: #1E293B;
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --border-color: #334155;
-  --shadow-color: rgba(0, 0, 0, 0.4);
+  --page: #0B0F17;
+  --surface: #1E293B;
+  --surface-muted: #131B2B;
+  --fg: #F8FAFC;
+  --fg-muted: #94A3B8;
+  --line: #334155;
+  --brand: #4F46E5;
+  --brand-hover: #4338CA;
+  --brand-fg: #A5B4FC;
+  --live: #10B981;
+  --scrollbar: #334155;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-mono: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  /* Indigo text/icons readable on both themes (AA on page and surface). */
+  --color-brand-fg: var(--brand-fg);
+  --color-live: var(--live);
+  /* Fixed (theme-independent) smoke, used for overlays. */
+  --color-smoke: #0B0F17;
+
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-scale-in: scale-in 0.2s ease-out;
 }
 
 /* ============================================================
-   Base Styles
+   Base
    ============================================================ */
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-page);
-  color: var(--text-primary);
+  background-color: var(--page);
+  color: var(--fg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ============================================================
-   Scrollbar personalizado (Dark mode)
-   ============================================================ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -81,92 +90,39 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: var(--scrollbar);
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* ============================================================
-   Keyframe Animations
+   Motion
    ============================================================ */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  to {
-    opacity: 1;
-    transform: scale(1);
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-}
-
-/* ============================================================
-   Utility classes
-   ============================================================ */
-.glass {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.dark .glass {
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(51, 65, 85, 0.5);
-}
-
-.animate-in {
-  animation: fade-in 0.4s ease-out both;
-}
-
-.animate-in.fade-in {
-  animation-name: fade-in;
-}
-
-.animate-in.zoom-in-95 {
-  animation-name: scale-in;
-}
-
-/* ============================================================
-   Line clamp utility (fallback)
-   ============================================================ */
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* ============================================================
-   Focus visible styles (Accesibilidad)
-   ============================================================ */
-:focus-visible {
-  outline: 2px solid #4F46E5;
-  outline-offset: 2px;
-  border-radius: 4px;
 }

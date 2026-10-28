@@ -37,7 +37,8 @@ Infrastructure (infrastructure/repositories/ + datasources/)
 - **Diseño & Paleta Corporativa**:
   - **Dark Mode**: Fondo `#0B0F17` (Gris humo profundo), superficie `#1E293B`, texto `#F8FAFC`.
   - **Light Mode**: Fondo `#F8FAFC`, superficie `#FFFFFF`, texto `#0F172A`.
-  - **Acentos**: Indigo Corporativo `#4F46E5`, Verde Live `#10B981`, Resplandor Neón Cyberpunk.
+  - **Acentos**: Indigo Corporativo `#4F46E5`, Verde Live `#10B981`.
+  - Tokens semánticos (`bg-page`, `bg-surface`, `text-fg`, `border-line`, `bg-brand`…) en `src/app/globals.css`; ver `.agents/rules/styling-theme.md`.
 
 ---
 

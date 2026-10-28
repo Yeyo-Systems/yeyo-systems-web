@@ -12,14 +12,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary:
-    'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 border border-transparent',
-  secondary:
-    'bg-slate-800 hover:bg-slate-700 text-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 shadow-sm border border-slate-700',
-  outline:
-    'border border-slate-200 dark:border-slate-700 hover:border-indigo-500/50 dark:hover:border-indigo-500/50 text-slate-700 dark:text-slate-300 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/10',
-  ghost:
-    'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800',
+  primary: 'bg-brand hover:bg-brand-hover text-white border border-transparent shadow-sm',
+  secondary: 'bg-surface-muted hover:bg-line text-fg border border-line',
+  outline: 'border border-line hover:border-brand text-fg hover:bg-brand/5',
+  ghost: 'text-fg-muted hover:text-fg hover:bg-surface-muted',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -49,8 +45,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         className={`
           inline-flex items-center justify-center font-semibold
-          transition-all duration-200 ease-out
-          focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-[#0B0F17]
+          transition-colors duration-200 ease-out
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-page
           disabled:opacity-50 disabled:cursor-not-allowed
           cursor-pointer
           ${variantStyles[variant]}

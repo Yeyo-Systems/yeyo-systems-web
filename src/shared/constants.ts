@@ -17,9 +17,28 @@ export const BRAND_COLORS = {
   indigoHover: '#4338CA',
   emeraldActive: '#10B981',
   emeraldHover: '#059669',
-  violetGlow: '#7C3AED',
-  cyanGlow: '#00F0FF',
 } as const;
+
+export interface TechStackGroup {
+  readonly label: string;
+  readonly items: ReadonlyArray<string>;
+}
+
+/** Tecnologías, lenguajes y plataformas con los que trabaja la empresa. */
+export const COMPANY_TECH_STACK: ReadonlyArray<TechStackGroup> = [
+  {
+    label: 'Tecnologías',
+    items: ['Flutter', 'Next.js', 'Firebase', 'Supabase', 'PostgreSQL'],
+  },
+  {
+    label: 'Lenguajes',
+    items: ['Dart', 'TypeScript', 'SQL'],
+  },
+  {
+    label: 'Plataformas',
+    items: ['Android', 'iOS', 'Web', 'Desktop'],
+  },
+];
 
 export const ECOSYSTEM_APPS_IDS = [
   'khatu',

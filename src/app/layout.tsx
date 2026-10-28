@@ -106,15 +106,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col antialiased bg-[#F8FAFC] dark:bg-[#0B0F17] text-slate-900 dark:text-slate-50 transition-colors duration-300">
+      <body className="min-h-full flex flex-col antialiased bg-page text-fg">
         <ThemeProvider>
           <FirebaseAnalytics />
           {/* Navigation */}
-          <header className="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-[#0B0F17]/80 backdrop-blur-md">
+          <header className="sticky top-0 z-40 border-b border-line bg-page/85 backdrop-blur-md">
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
               {/* Logo / Brand */}
-              <a href="#" className="flex items-center gap-3 group">
-                <div className="relative w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
+              <a href="#" className="flex items-center gap-3">
+                <div className="relative w-9 h-9 rounded-xl overflow-hidden">
                   <Image
                     src="/icon.svg"
                     alt="Yeyo Systems Icon"
@@ -125,12 +125,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-extrabold text-lg text-slate-900 dark:text-slate-50 tracking-tight leading-tight flex items-center gap-1.5">
+                  <span className="font-extrabold text-lg text-fg tracking-tight leading-tight">
                     Yeyo Systems
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   </span>
-                  <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 dark:text-slate-500 font-semibold">
-                    Flutter Ecosystem
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-fg-muted font-semibold">
+                    Software Ecosystem
                   </span>
                 </div>
               </a>
@@ -139,13 +138,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <div className="hidden md:flex items-center gap-6">
                 <a
                   href="#ecosystem"
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                  className="text-sm font-medium text-fg-muted hover:text-brand-fg transition-colors duration-200"
                 >
                   Ecosistema
                 </a>
                 <a
                   href="#about"
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                  className="text-sm font-medium text-fg-muted hover:text-brand-fg transition-colors duration-200"
                 >
                   Nosotros
                 </a>
@@ -153,7 +152,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   href={GITHUB_ORG_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                  className="text-sm font-medium text-fg-muted hover:text-brand-fg transition-colors duration-200"
                 >
                   GitHub
                 </a>
@@ -170,7 +169,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <main className="flex-1">{children}</main>
 
           {/* Footer */}
-          <footer className="border-t border-slate-200 dark:border-slate-800 py-10 mt-auto bg-slate-50/50 dark:bg-slate-900/40">
+          <footer className="border-t border-line py-10 mt-auto bg-surface-muted">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-3">
@@ -184,29 +183,29 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                    <span className="text-sm font-bold text-fg">
                       Yeyo Systems
                     </span>
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs text-fg-muted">
                       Multi-Platform Software Engineering
                     </span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
+                <p className="text-xs text-fg-muted text-center">
                   © 2026 Yeyo Systems. Clean Architecture con Flutter &amp; Next.js.
                 </p>
 
                 <div className="flex items-center gap-5">
                   <a
                     href="#ecosystem"
-                    className="text-xs text-slate-500 hover:text-indigo-500 transition-colors duration-200"
+                    className="text-xs text-fg-muted hover:text-brand-fg transition-colors duration-200"
                   >
                     Apps
                   </a>
                   <a
                     href="#about"
-                    className="text-xs text-slate-500 hover:text-indigo-500 transition-colors duration-200"
+                    className="text-xs text-fg-muted hover:text-brand-fg transition-colors duration-200"
                   >
                     Filosofía
                   </a>
@@ -214,7 +213,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     href={GITHUB_ORG_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-slate-500 hover:text-indigo-500 transition-colors duration-200"
+                    className="text-xs text-fg-muted hover:text-brand-fg transition-colors duration-200"
                   >
                     GitHub
                   </a>
