@@ -29,11 +29,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Yeyo Systems — Software Multiplataforma en Flutter',
+    default: 'Yeyo Systems — Software Multiplataforma',
     template: '%s | Yeyo Systems',
   },
   description:
-    'Ecosistema de aplicaciones multiplataforma construidas en Flutter. Khatu, Cortex, Saberio y más — software con propósito para transformar la experiencia de las personas.',
+    'Aplicaciones multiplataforma para ventas e inventario, gestión educativa, servicios e instituciones: Khatu, Cortex, Saberio y más.',
   keywords: [
     'Flutter',
     'aplicaciones móviles',
@@ -42,9 +42,10 @@ export const metadata: Metadata = {
     'Cortex',
     'Saberio',
     'Khatu Services',
-    'Amateur Things',
+    'Next.js',
     'software multiplataforma',
-    'apps Colombia',
+    'gestión educativa Ley 070',
+    'software Bolivia',
   ],
   authors: [{ name: COMPANY_NAME, url: SITE_URL }],
   creator: COMPANY_NAME,
@@ -55,10 +56,10 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'es_CO',
+    locale: 'es_BO',
     url: SITE_URL,
     siteName: COMPANY_NAME,
-    title: 'Yeyo Systems — Software Multiplataforma en Flutter',
+    title: 'Yeyo Systems — Software Multiplataforma',
     description:
       'Ecosistema de aplicaciones multiplataforma construidas en Flutter.',
     images: [
@@ -73,7 +74,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: COMPANY_NAME,
-    description: 'Software multiplataforma en Flutter',
+    description: 'Software multiplataforma con Flutter y Next.js',
     images: ['/logo.svg'],
   },
   robots: {

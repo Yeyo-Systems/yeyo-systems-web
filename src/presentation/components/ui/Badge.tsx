@@ -5,6 +5,8 @@ export type BadgeVariant =
   | 'beta'
   | 'alpha'
   | 'development'
+  | 'design'
+  | 'planned'
   | 'maintenance'
   | 'deprecated'
   | 'live'
@@ -24,6 +26,8 @@ const badgeStyles: Record<BadgeVariant, string> = {
   beta: 'bg-brand/10 text-brand-fg border-brand/40',
   alpha: neutral,
   development: neutral,
+  design: neutral,
+  planned: neutral,
   maintenance: neutral,
   deprecated: neutral,
   neutral,
@@ -35,6 +39,8 @@ const dotStyles: Record<BadgeVariant, string> = {
   beta: 'bg-brand-fg',
   alpha: 'bg-fg-muted',
   development: 'bg-fg-muted',
+  design: 'bg-fg-muted',
+  planned: 'bg-fg-muted',
   maintenance: 'bg-fg-muted',
   deprecated: 'bg-fg-muted',
   neutral: 'bg-fg-muted',

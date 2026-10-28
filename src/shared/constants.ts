@@ -5,7 +5,7 @@
 
 export const COMPANY_NAME = 'Yeyo Systems';
 export const COMPANY_LEGAL_NAME = 'Yeyo Systems S.A.S.';
-export const COMPANY_TAGLINE = 'Multi-Platform Software Ecosystem in Flutter';
+export const COMPANY_TAGLINE = 'Multi-Platform Software Ecosystem';
 export const SITE_URL = 'https://yeyosystems.com';
 export const GITHUB_ORG_URL = 'https://github.com/Yeyo-Systems';
 
@@ -88,6 +88,7 @@ export const ECOSYSTEM_APPS_IDS = [
   'cortex',
   'saberio',
   'khatu-services',
+  'penitentiary',
   'amateur-things',
 ] as const;
 

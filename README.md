@@ -46,11 +46,14 @@ Infrastructure (infrastructure/repositories/ + datasources/)
 
 | App | Categoría | Estado | Tecnologías | Descripción |
 |---|---|---|---|---|
-| **Khatu** | Salud & Bienestar | `production` | Flutter, Android, iOS | Aplicación integral de bienestar, hábitos y salud personal. |
-| **Cortex** | Asistente IA | `beta` | Flutter, Multiplataforma | Asistente de inteligencia artificial y productividad. |
-| **Saberio** | Educación | `beta` | Flutter, Web, Móvil | Plataforma educativa adaptativa con rutas gamificadas. |
-| **Khatu Services** | Enterprise B2B | `alpha` | Flutter Web & Mobile | Solución corporativa para gestión de salud en equipos. |
-| **Amateur Things** | Laboratorio Abierto | `development` | Flutter & Open Source | Proyectos experimentales y herramientas de código abierto. |
+| **Khatu** | Ventas e inventario | `alpha` | Flutter (Android, iOS, Web) | Ventas, depósitos y tiendas; versión especializada en telas (rollo y metro), mermas, cuentas por cobrar/pagar y reportes. |
+| **Cortex** | Educación | `alpha` | Flutter (Android, iOS, Web) | Gestión educativa para colegios (Ley 070), institutos y universidades: boletines, asistencia, padres y alumnos. |
+| **Saberio** | Educación | `alpha` | Flutter | Venta de cursos y contenido educativo en línea. |
+| **Khatu Services** | Servicios | `design` | Flutter | Reservas, atención y cobro para negocios de servicios. Nombre provisional. |
+| **Penitentiary** | Institucional | `development` | Web | Registros de personas privadas de libertad y del consejo de internos. |
+| **Amateur Things** | Contenido | `alpha` | Flutter | Monetización de contenido para adultos. No se muestra en el sitio (`isListed: false`). |
+
+El catálogo vive en `src/infrastructure/datasources/MockAppDataSource.ts`; las métricas públicas solo se muestran para apps en producción.
 
 ---
 

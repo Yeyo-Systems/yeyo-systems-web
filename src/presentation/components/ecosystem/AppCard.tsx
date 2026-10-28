@@ -1,8 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { AppProduct } from '@/domain/entities/AppProduct';
-import { getStatusLabel, isActiveStatus } from '@/domain/entities/AppProduct';
+import type { AppProduct, Platform } from '@/domain/entities/AppProduct';
+import {
+  getCategoryLabel,
+  getStatusLabel,
+  isActiveStatus,
+  showsPublicMetrics,
+} from '@/domain/entities/AppProduct';
 import { formatDownloads, formatRating } from '@/domain/entities/AppMetric';
 import { PlatformModal } from './PlatformModal';
 import { Badge, Button } from '@/presentation/components/ui';
@@ -11,9 +16,21 @@ interface AppCardProps {
   app: AppProduct;
 }
 
+const PLATFORM_LABELS: Record<Platform, string> = {
+  android: 'Android',
+  ios: 'iOS',
+  web: 'Web',
+  macos: 'macOS',
+  windows: 'Windows',
+  linux: 'Linux',
+};
+
 export function AppCard({ app }: AppCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isActive = isActiveStatus(app.status);
+  const metrics = showsPublicMetrics(app) ? app.metrics : undefined;
+  const chips = [...app.stack, ...app.platforms.map((platform) => PLATFORM_LABELS[platform])];
+  const uniqueChips = Array.from(new Set(chips));
 
   return (
     <>
@@ -26,7 +43,6 @@ export function AppCard({ app }: AppCardProps) {
           transition-[box-shadow,border-color] duration-200
         "
       >
-        {/* Card Header */}
         <div className="p-6 flex items-start gap-4">
           <div
             aria-hidden="true"
@@ -37,66 +53,88 @@ export function AppCard({ app }: AppCardProps) {
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-lg font-bold text-fg truncate">
+              <h3 className="text-lg font-bold text-fg">
                 {app.name}
               </h3>
               <Badge variant={app.status} dot={isActive}>
                 {getStatusLabel(app.status)}
               </Badge>
             </div>
-            <p className="text-sm text-fg-muted mt-0.5 font-medium">
-              {app.tagline}
+            <p className="text-xs font-semibold uppercase tracking-wider text-brand-fg mt-1">
+              {getCategoryLabel(app.category)}
             </p>
           </div>
         </div>
 
-        {/* Description */}
-        <div className="px-6 pb-4">
-          <p className="text-sm text-fg-muted leading-relaxed line-clamp-3">
+        <div className="px-6 pb-4 space-y-3">
+          <p className="text-sm font-medium text-fg">
+            {app.tagline}
+          </p>
+          <p className="text-sm text-fg-muted leading-relaxed">
             {app.description}
           </p>
         </div>
 
-        {/* Metrics Row */}
-        {app.metrics && (app.metrics.totalDownloads > 0 || app.metrics.averageRating > 0) && (
-          <div className="px-6 py-3 border-t border-line flex gap-4">
-            {app.metrics.totalDownloads > 0 && (
-              <div className="flex items-center gap-1.5">
-                <svg aria-hidden="true" className="w-3.5 h-3.5 text-fg-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        {app.highlights.length > 0 && (
+          <ul className="px-6 pb-4 space-y-1.5">
+            {app.highlights.map((highlight) => (
+              <li key={highlight} className="flex items-start gap-2 text-sm text-fg">
+                <svg aria-hidden="true" className="w-4 h-4 mt-0.5 flex-shrink-0 text-brand-fg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
+                {highlight}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {app.upcoming && app.upcoming.length > 0 && (
+          <div className="mx-6 mb-4 p-3 rounded-xl bg-surface-muted border border-line">
+            <p className="text-xs font-semibold uppercase tracking-wider text-fg-muted mb-1.5">
+              Próximas versiones
+            </p>
+            <p className="text-sm text-fg-muted leading-relaxed">
+              {app.upcoming.join(' · ')}
+            </p>
+          </div>
+        )}
+
+        {metrics && (metrics.totalDownloads > 0 || metrics.averageRating > 0) && (
+          <div className="px-6 py-3 border-t border-line flex gap-4">
+            {metrics.totalDownloads > 0 && (
+              <div className="flex items-center gap-1.5">
                 <span className="text-xs font-semibold font-mono text-fg">
-                  {formatDownloads(app.metrics.totalDownloads)}
+                  {formatDownloads(metrics.totalDownloads)}
                 </span>
                 <span className="text-xs text-fg-muted">descargas</span>
               </div>
             )}
-            {app.metrics.averageRating > 0 && (
+            {metrics.averageRating > 0 && (
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-semibold font-mono text-fg">
-                  {formatRating(app.metrics.averageRating)}
+                  {formatRating(metrics.averageRating)}
                 </span>
-                <span className="text-xs text-fg-muted">({app.metrics.totalRatings})</span>
+                <span className="text-xs text-fg-muted">({metrics.totalRatings})</span>
               </div>
             )}
           </div>
         )}
 
-        {/* Platforms */}
-        <div className="px-6 pb-4 flex flex-wrap gap-1.5 mt-auto">
-          {app.platforms.map((platform) => (
-            <span
-              key={platform}
-              className="px-2 py-0.5 rounded-md text-xs font-medium bg-surface-muted text-fg-muted border border-line"
-            >
-              {platform.charAt(0).toUpperCase() + platform.slice(1)}
-            </span>
-          ))}
-        </div>
+        {uniqueChips.length > 0 && (
+          <div className="px-6 pb-6 pt-2 flex flex-wrap gap-1.5 mt-auto">
+            {uniqueChips.map((chip) => (
+              <span
+                key={chip}
+                className="px-2 py-0.5 rounded-md text-xs font-medium bg-surface-muted text-fg-muted border border-line"
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
+        )}
 
-        {/* CTA Button */}
-        <div className="px-6 pb-6">
-          {app.isAvailable ? (
+        {app.isAvailable && (
+          <div className="px-6 pb-6">
             <Button
               variant="primary"
               size="md"
@@ -110,12 +148,8 @@ export function AppCard({ app }: AppCardProps) {
             >
               Ver plataformas
             </Button>
-          ) : (
-            <div className="w-full py-2.5 px-4 rounded-xl bg-surface-muted border border-line text-center">
-              <span className="text-sm text-fg-muted font-medium">Próximamente</span>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </article>
 
       {isModalOpen && (

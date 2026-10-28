@@ -1,7 +1,7 @@
 // ============================================================
 // DOMAIN LAYER — AppProduct Entity
-// Entidad pura de TypeScript: 0 dependencias externas.
-// Representa una aplicación del ecosistema Yeyo Systems.
+// Pure TypeScript: no external dependencies.
+// A product of the Yeyo Systems ecosystem.
 // ============================================================
 
 import type { AppMetric } from './AppMetric';
@@ -12,57 +12,20 @@ export type AppStatus =
   | 'beta'
   | 'alpha'
   | 'development'
+  | 'design'
+  | 'planned'
   | 'maintenance'
   | 'deprecated';
 
 export type AppCategory =
-  | 'productivity'
-  | 'health'
+  | 'sales'
   | 'education'
-  | 'ai'
+  | 'content'
   | 'services'
-  | 'experimental';
+  | 'institutional';
 
-export interface AppProduct {
-  /** Identificador único de la aplicación (slug) */
-  readonly id: string;
-
-  /** Nombre público de la aplicación */
-  readonly name: string;
-
-  /** Subtítulo o tagline de la aplicación */
-  readonly tagline: string;
-
-  /** Descripción larga de la aplicación */
-  readonly description: string;
-
-  /** Estado actual de la aplicación */
-  readonly status: AppStatus;
-
-  /** Categoría principal de la aplicación */
-  readonly category: AppCategory;
-
-  /** Plataformas disponibles */
-  readonly platforms: ReadonlyArray<Platform>;
-
-  /** Nombre del ícono (se resolverá en la capa de presentación) */
-  readonly iconName: string;
-
-  /** Color primario de la app en formato hex */
-  readonly accentColor: string;
-
-  /** Links de descarga y acceso por plataforma */
-  readonly links: PlatformLinks;
-
-  /** Métricas públicas (puede ser undefined si aún no hay datos) */
-  readonly metrics?: AppMetric;
-
-  /** Fecha de lanzamiento público */
-  readonly launchDate?: string;
-
-  /** ¿Está disponible para descarga/acceso? */
-  readonly isAvailable: boolean;
-}
+/** Roadmap group shown on the site, derived from the status. */
+export type AppStage = 'production' | 'development' | 'design' | 'planned';
 
 export type Platform =
   | 'android'
@@ -72,20 +35,91 @@ export type Platform =
   | 'windows'
   | 'linux';
 
-/** Helper: retorna un label legible para el estado de la app */
+export interface AppProduct {
+  readonly id: string;
+  readonly name: string;
+  readonly tagline: string;
+  readonly description: string;
+  readonly status: AppStatus;
+  readonly category: AppCategory;
+  /** Key capabilities, most relevant first. */
+  readonly highlights: ReadonlyArray<string>;
+  /** Next planned capabilities. */
+  readonly upcoming?: ReadonlyArray<string>;
+  /** Main technologies (e.g. Flutter, Next.js). */
+  readonly stack: ReadonlyArray<string>;
+  readonly platforms: ReadonlyArray<Platform>;
+  readonly links: PlatformLinks;
+  /** Public metrics; only meaningful for apps in production. */
+  readonly metrics?: AppMetric;
+  /** Whether public download or access links exist. */
+  readonly isAvailable: boolean;
+  /** Unlisted apps are never shown on the public site. */
+  readonly isListed: boolean;
+}
+
 export function getStatusLabel(status: AppStatus): string {
   const labels: Record<AppStatus, string> = {
-    production: 'Production',
+    production: 'Estable',
     beta: 'Beta',
     alpha: 'Alpha',
-    development: 'In Development',
-    maintenance: 'Maintenance',
-    deprecated: 'Deprecated',
+    development: 'En desarrollo',
+    design: 'En diseño',
+    planned: 'Planificada',
+    maintenance: 'Mantenimiento',
+    deprecated: 'Descontinuada',
   };
   return labels[status];
 }
 
-/** Helper: retorna si el estado indica disponibilidad activa */
+export function getCategoryLabel(category: AppCategory): string {
+  const labels: Record<AppCategory, string> = {
+    sales: 'Ventas e inventario',
+    education: 'Educación',
+    content: 'Contenido',
+    services: 'Servicios',
+    institutional: 'Institucional',
+  };
+  return labels[category];
+}
+
+/** Deprecated apps have no stage and are not shown. */
+export function getAppStage(status: AppStatus): AppStage | null {
+  switch (status) {
+    case 'production':
+    case 'maintenance':
+      return 'production';
+    case 'beta':
+    case 'alpha':
+    case 'development':
+      return 'development';
+    case 'design':
+      return 'design';
+    case 'planned':
+      return 'planned';
+    case 'deprecated':
+      return null;
+  }
+}
+
+export const APP_STAGE_ORDER: ReadonlyArray<AppStage> = ['production', 'development', 'design', 'planned'];
+
+export function getStageLabel(stage: AppStage): string {
+  const labels: Record<AppStage, string> = {
+    production: 'En producción',
+    development: 'En desarrollo',
+    design: 'En diseño',
+    planned: 'Próximamente',
+  };
+  return labels[stage];
+}
+
+/** Statuses with users on a public release (live indicator). */
 export function isActiveStatus(status: AppStatus): boolean {
-  return status === 'production' || status === 'beta' || status === 'alpha';
+  return status === 'production' || status === 'beta';
+}
+
+/** Public metrics are shown only for apps in production. */
+export function showsPublicMetrics(app: AppProduct): boolean {
+  return getAppStage(app.status) === 'production';
 }

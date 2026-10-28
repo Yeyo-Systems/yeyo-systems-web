@@ -7,6 +7,7 @@
 
 import type { IAppRepository } from '../repositories/IAppRepository';
 import type { AppProduct } from '../entities/AppProduct';
+import { getAppStage } from '../entities/AppProduct';
 
 export class GetAppsUseCase {
   constructor(private readonly repository: IAppRepository) {}
@@ -19,7 +20,7 @@ export class GetAppsUseCase {
   async execute(options?: GetAppsOptions): Promise<AppProduct[]> {
     const apps = await this.repository.getApps();
 
-    let result = apps;
+    let result = apps.filter((app) => app.isListed && getAppStage(app.status) !== null);
 
     // Filtrar por categoría si se especifica
     if (options?.category) {
@@ -38,7 +39,6 @@ export class GetAppsUseCase {
       result = result.filter((app) => app.isAvailable);
     }
 
-    // Ordenar: production > beta > alpha > development > el resto
     return result.sort(sortByStatus);
   }
 }
@@ -51,11 +51,13 @@ export interface GetAppsOptions {
 
 const statusOrder: Record<AppProduct['status'], number> = {
   production: 0,
-  beta: 1,
-  alpha: 2,
-  development: 3,
-  maintenance: 4,
-  deprecated: 5,
+  maintenance: 1,
+  beta: 2,
+  alpha: 3,
+  development: 4,
+  design: 5,
+  planned: 6,
+  deprecated: 7,
 };
 
 function sortByStatus(a: AppProduct, b: AppProduct): number {
